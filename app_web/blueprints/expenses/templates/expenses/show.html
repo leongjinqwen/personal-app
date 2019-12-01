@@ -1,6 +1,6 @@
 {% extends "_layout.html" %}
 {% block title %}
-  Profile
+  Expenses
 {% endblock %}
 {% block content %}
 <!-- <h1>{{current_user.id}}</h1> -->
@@ -9,6 +9,8 @@
 <a class="btn" href="{{url_for('expenses.category',category='transport')}}">Transport</a>
 <a class="btn" href="{{url_for('expenses.category',category='entertainment')}}">Entertainment</a>
 <a class="btn" href="{{url_for('expenses.category',category='general')}}">General</a>
+<h3>Expenses statement of {{ today_date }}</h3>
+<h5>Category : {{ cat }}</h5>
 <table class="table">
   <thead>
     <tr>
@@ -21,17 +23,25 @@
   </thead>
   <tbody>
     {% for expense in expenses %}
-    <tr>
-      <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
-      <td>{{expense.category}}</td>
-      <td>{{expense.source}}</td>
-      <td>{{expense.description}}</td>
-      <td>RM {{expense.amount}}</td>
-    </tr>
+      <tr>
+        <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
+        <td>{{expense.category}}</td>
+        <td>{{expense.source}}</td>
+        <td>{{expense.description}}</td>
+        <td>RM {{expense.amount}}</td>
+      </tr>
     {% endfor %}
   </tbody>
 </table>
 <div class="mt-5 text-right">
-    <h5>Total Expenses : RM <strong>{{ttl[0].total}}</strong></h5>
+  <h5>Total Expenses : RM 
+    <strong>
+    {% if ttl[0].total == None %}
+      0.00
+    {% else %}
+      {{ttl[0].total}}
+    {% endif %}
+    </strong>
+  </h5>
 </div>
 {% endblock %}

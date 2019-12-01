@@ -3,6 +3,7 @@ from models.user import User
 from models.expense import Expense
 from flask_login import current_user
 from peewee import fn
+from datetime import date
 
 expenses_blueprint = Blueprint('expenses',
                             __name__,
@@ -25,23 +26,17 @@ def create(user_id):
         flash("Something happened, try again later.","danger")
         return render_template('expenses/new.html')
 
-# @expenses_blueprint.route('/all')
-# def show():
-#     if current_user.is_authenticated:
-#         expenses = Expense.select().where(Expense.user==current_user.id)
-#         ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==current_user.id)
-#         return render_template('expenses/show.html',expenses=expenses, ttl=ttl)
-#     return render_template('expenses/new.html')  
-
 @expenses_blueprint.route('/<category>')
 def category(category):
     if current_user.is_authenticated:
         if category == 'all':
-            expenses = Expense.select().where(Expense.user==current_user.id)
-            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==current_user.id)
+            expenses = Expense.select().where(Expense.user==current_user.id,Expense.month==date.today().strftime("%b"))
+            new_list = []
+            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==current_user.id,Expense.month==date.today().strftime("%b"))
         else:
-            expenses = Expense.select().where(Expense.user==current_user.id,Expense.category==category.title())
-            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==current_user.id,Expense.category==category.title())
-        return render_template('expenses/show.html',expenses=expenses,ttl=ttl)
+            expenses = Expense.select().where(Expense.user==current_user.id,Expense.category==category.title(),Expense.month==date.today().strftime("%b"))
+            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==current_user.id,Expense.category==category.title(),Expense.month==date.today().strftime("%b"))
+            print(ttl[0].total)
+        return render_template('expenses/show.html',expenses=expenses,ttl=ttl,cat=category.title())
     return render_template('expenses/new.html')  
 

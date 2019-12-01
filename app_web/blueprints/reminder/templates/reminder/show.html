@@ -1,0 +1,44 @@
+{% extends "_layout.html" %}
+{% block title %}
+  Expenses
+{% endblock %}
+{% block content %}
+<!-- <h1>{{current_user.id}}</h1> -->
+<h3>Reminder</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Date</th>
+      <th scope="col">Group</th>
+      <th scope="col">Description</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reminder in reminders %}
+      <tr>
+        <td>{{reminder.id}}</td>
+        <td>{{reminder.created_at.date().strftime("%b %d, %Y")}}</td>
+        <td>{{reminder.group}}</td>
+        <td>{{reminder.description}}</td>
+        <form action="{{url_for('reminder.edit',id=reminder.id)}}" method="POST" id="form{{reminder.id}}">
+          <td>
+            <input type="checkbox" name="markDone" class="done mr-2" id={{reminder.id}}>
+            {% if reminder.status %}
+            Done
+            {% else %}
+            Pending
+            {% endif %}
+          </td>
+        </form>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script>
+  $(".done").change(function(e){
+    $(`#form${e.target.id}`).submit()
+  })
+</script>
+{% endblock %}
