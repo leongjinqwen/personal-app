@@ -33,10 +33,10 @@ def create(user_id):
 @reminder_blueprint.route('/<group>', methods=['GET'])
 def show(group):
     if current_user.is_authenticated:
-        if category == 'all':
+        if group == 'all':
             reminders = Reminder.select().where(Reminder.user==current_user.id).order_by(Reminder.created_at.asc())
         else:
-            reminders = Reminder.select().where(Reminder.group==group,Reminder.user==current_user.id).order_by(Reminder.created_at.asc())
+            reminders = Reminder.select().where(Reminder.group==group.title(),Reminder.user==current_user.id).order_by(Reminder.created_at.asc())
         return render_template('reminder/show.html',reminders=reminders)
     return render_template('reminder/new.html')
 
@@ -46,7 +46,7 @@ def edit(id):
     reminder.status = not reminder.status
     if reminder.save():
         flash("Successfully update.","primary")
-        return redirect(url_for('reminder.show'))
+        return redirect(url_for('reminder.show',group=reminder.group.lower()))
     else:
         flash("Something happened, try again later.","danger")
         return render_template('reminder/show.html',reminders=reminders)
