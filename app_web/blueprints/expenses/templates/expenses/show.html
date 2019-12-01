@@ -3,7 +3,6 @@
   Expenses
 {% endblock %}
 {% block content %}
-<!-- <h1>{{current_user.id}}</h1> -->
 <a class="btn" href="{{url_for('expenses.category',category='all')}}">Show All</a>
 <a class="btn" href="{{url_for('expenses.category',category='food')}}">Food</a>
 <a class="btn" href="{{url_for('expenses.category',category='transport')}}">Transport</a>
@@ -14,6 +13,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th scope="col">Id</th>
       <th scope="col">Date</th>
       <th scope="col">Category</th>
       <th scope="col">Source</th>
@@ -23,7 +23,12 @@
   </thead>
   <tbody>
     {% for expense in expenses %}
-      <tr>
+    <tr>
+      <td>
+        <a href="{{url_for('expenses.edit',id=expense.id)}}">
+          {{expense.id}}
+        </a>
+        </td>
         <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
         <td>{{expense.category}}</td>
         <td>{{expense.source}}</td>

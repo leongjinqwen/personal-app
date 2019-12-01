@@ -21,7 +21,7 @@ def create(user_id):
     expense = Expense(user=user.id,category=request.form.get('category'),amount=request.form.get('amount'),source=request.form.get('source'),description=request.form.get('desc'))
     if expense.save():
         flash("Successfully create expense record.","primary")
-        return redirect(url_for('users.show',username=user.username))
+        return redirect(url_for('expenses.category',category="all"))
     else:
         flash("Something happened, try again later.","danger")
         return render_template('expenses/new.html')
@@ -30,13 +30,34 @@ def create(user_id):
 def category(category):
     if current_user.is_authenticated:
         if category == 'all':
-            expenses = Expense.select().where(Expense.user==current_user.id,Expense.month==date.today().strftime("%b"))
+            expenses = Expense.select().where(Expense.user==current_user.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
             new_list = []
             ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==current_user.id,Expense.month==date.today().strftime("%b"))
         else:
-            expenses = Expense.select().where(Expense.user==current_user.id,Expense.category==category.title(),Expense.month==date.today().strftime("%b"))
+            expenses = Expense.select().where(Expense.user==current_user.id,Expense.category==category.title(),Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
             ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==current_user.id,Expense.category==category.title(),Expense.month==date.today().strftime("%b"))
             print(ttl[0].total)
         return render_template('expenses/show.html',expenses=expenses,ttl=ttl,cat=category.title())
-    return render_template('expenses/new.html')  
+    return render_template('sessions/new.html')  
+
+@expenses_blueprint.route('/edit/<id>',methods=["GET"])
+def edit(id):
+    expense = Expense.get_by_id(id)
+    return render_template('expenses/edit.html',expense=expense)  
+    
+@expenses_blueprint.route('/<id>/update',methods=["POST"])
+def update(id):
+    if current_user.is_authenticated:
+        expense = Expense.get_by_id(id)
+        expense.category = request.form.get('category')
+        expense.source = request.form.get('source')
+        expense.desc = request.form.get('desc')
+        expense.amount = request.form.get('amount')
+        if expense.save():
+            flash("Successfully update expense record.","primary")
+            return redirect(url_for('expenses.edit',id=expense.id))
+        else:
+            flash("Something happened, try again later.","danger")
+            return render_template('expenses/edit.html',expense=expense) 
+    return render_template('sessions/new.html')  
 

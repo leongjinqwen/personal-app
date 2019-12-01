@@ -1,10 +1,12 @@
 {% extends "_layout.html" %}
 {% block title %}
-  Expenses
+  Reminders
 {% endblock %}
 {% block content %}
-<!-- <h1>{{current_user.id}}</h1> -->
 <h3>Reminder</h3>
+<a class="btn" href="{{url_for('reminders.show',group='all')}}">Show All</a>
+<a class="btn" href="{{url_for('reminders.show',group='personal')}}">Personal</a>
+<a class="btn" href="{{url_for('reminders.show',group='work')}}">Work</a>
 <table class="table">
   <thead>
     <tr>
@@ -22,7 +24,7 @@
         <td>{{reminder.created_at.date().strftime("%b %d, %Y")}}</td>
         <td>{{reminder.group}}</td>
         <td>{{reminder.description}}</td>
-        <form action="{{url_for('reminder.edit',id=reminder.id)}}" method="POST" id="form{{reminder.id}}">
+        <form action="{{url_for('reminders.edit',id=reminder.id)}}" method="POST" id="form{{reminder.id}}">
           <td>
             <input type="checkbox" name="markDone" class="done mr-2" id={{reminder.id}}>
             {% if reminder.status %}

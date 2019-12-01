@@ -6,11 +6,23 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       {% if current_user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('reminder.new')}}">Reminder</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="reminderDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Reminder
+        </a>
+        <div class="dropdown-menu" aria-labelledby="reminderDropdown">
+          <a class="nav-link dropdown-item" href="{{url_for('reminders.new')}}">Add</a>
+          <a class="nav-link dropdown-item" href="{{url_for('reminders.show',group='all')}}">List</a>
+        </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('expenses.new')}}">Expenses</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Expenses
+        </a>
+        <div class="dropdown-menu" aria-labelledby="expensesDropdown">
+          <a class="nav-link dropdown-item" href="{{url_for('expenses.new')}}">Add</a>
+          <a class="nav-link dropdown-item" href="{{url_for('expenses.category',category='all')}}">List</a>
+        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{url_for('sessions.logout')}}">Logout</a>
