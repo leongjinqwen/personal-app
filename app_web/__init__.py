@@ -7,9 +7,11 @@ from app_web.blueprints.reminders.views import reminders_blueprint
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
 from .util.jinja_filter import register_jinja_filters
+import os
+import sendgrid
 
 register_jinja_filters(app)
-
+sg = sendgrid.SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
 assets = Environment(app)
 assets.register(bundles)
 

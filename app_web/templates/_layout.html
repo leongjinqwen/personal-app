@@ -8,12 +8,13 @@
 
     {% assets "home_css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}">
+      <link rel="stylesheet" media="print" href="/static/css/print.css">
     {% endassets %}
 
     {% assets "home_js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
-
+    
     {% block header %}
     {% endblock %}
 

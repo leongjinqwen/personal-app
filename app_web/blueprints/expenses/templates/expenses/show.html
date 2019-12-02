@@ -2,14 +2,30 @@
 {% block title %}
   Expenses
 {% endblock %}
+{% block header %}
+<style>
+  td,th {
+    border-left:1px solid #dee2e6;
+    border-right:1px solid #dee2e6;
+  }
+  th {
+    background-color: rgb(203, 250, 234);
+  }
+  table {
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+</style>
+{% endblock %}
 {% block content %}
+<h3>Expenses statement of {{ today_date }}</h3>
+<h5>Category : {{ cat }}</h5>
 <a class="btn" href="{{url_for('expenses.category',category='all')}}">Show All</a>
 <a class="btn" href="{{url_for('expenses.category',category='food')}}">Food</a>
 <a class="btn" href="{{url_for('expenses.category',category='transport')}}">Transport</a>
 <a class="btn" href="{{url_for('expenses.category',category='entertainment')}}">Entertainment</a>
 <a class="btn" href="{{url_for('expenses.category',category='general')}}">General</a>
-<h3>Expenses statement of {{ today_date }}</h3>
-<h5>Category : {{ cat }}</h5>
 <table class="table">
   <thead>
     <tr>
@@ -28,25 +44,36 @@
         <a href="{{url_for('expenses.edit',id=expense.id)}}">
           {{expense.id}}
         </a>
-        </td>
-        <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
-        <td>{{expense.category}}</td>
-        <td>{{expense.source}}</td>
-        <td>{{expense.description}}</td>
-        <td>RM {{expense.amount}}</td>
-      </tr>
+      </td>
+      <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
+      <td>{{expense.category}}</td>
+      <td>{{expense.source}}</td>
+      <td>{{expense.description}}</td>
+      <td>RM {{expense.amount}}</td>
+    </tr>
     {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <strong>
+            Total Expenses : 
+          </strong>
+        </td>
+        <td>
+          <strong>
+            RM 
+            {% if ttl[0].total == None %}
+              0.00
+            {% else %}
+              {{ttl[0].total}}
+            {% endif %}
+          </strong>
+        </td>
+      </tr>
   </tbody>
 </table>
-<div class="mt-5 text-right">
-  <h5>Total Expenses : RM 
-    <strong>
-    {% if ttl[0].total == None %}
-      0.00
-    {% else %}
-      {{ttl[0].total}}
-    {% endif %}
-    </strong>
-  </h5>
-</div>
+<button class="btn btn-primary" onclick="window.print()" >Print Statement</button>
 {% endblock %}
