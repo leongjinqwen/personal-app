@@ -4,6 +4,8 @@ from models.expense import Expense
 from flask_login import current_user
 from peewee import fn
 from datetime import date
+import os
+import pdfkit
 
 expenses_blueprint = Blueprint('expenses',
                             __name__,
@@ -31,7 +33,6 @@ def category(category):
     if current_user.is_authenticated:
         if category == 'all':
             expenses = Expense.select().where(Expense.user==current_user.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
-            new_list = []
             ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==current_user.id,Expense.month==date.today().strftime("%b"))
         else:
             expenses = Expense.select().where(Expense.user==current_user.id,Expense.category==category.title(),Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
@@ -61,3 +62,9 @@ def update(id):
             return render_template('expenses/edit.html',expense=expense) 
     return render_template('sessions/new.html')  
 
+# @expenses_blueprint.route('/<category>/export',methods=["GET"])
+# def export(category):
+#     url = f"{os.environ.get('DOMAIN')}/expenses/{category}"
+#     pdfkit.from_url(url, 'output.pdf')
+#     return url
+    

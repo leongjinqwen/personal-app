@@ -1,7 +1,11 @@
 button {
-    display: none;
+    display: none !important;
 }
 
 a {
     color: black;
+}
+
+#printButton {
+    display: none;
 }

@@ -4,6 +4,7 @@ from flask import Flask
 from models.base_model import db
 from models.user import User
 from flask_login import LoginManager
+import click
 
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'app_web')
@@ -34,3 +35,8 @@ def _db_close(exc):
         print(db)
         print(db.close())
     return exc
+
+@app.cli.command("email-statement",short_help='Email statement')
+def email_statement():
+    from app_web.util.mail_helper import send_email
+    send_email()
