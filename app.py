@@ -47,7 +47,6 @@ def email_statement():
     today = date.today().strftime("%d")
     last_day = monthrange(int(year),int(month))[1]
     if today == str(last_day):
-        print(today)
         send_email()
     else:
         print(today,"not last day")
