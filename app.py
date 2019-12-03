@@ -41,12 +41,13 @@ def email_statement():
     from app_web.util.mail_helper import send_email
     from datetime import date
     from calendar import monthrange
-    
+
     year = date.today().strftime("%Y")
     month = date.today().strftime("%m")
     today = date.today().strftime("%d")
     last_day = monthrange(int(year),int(month))[1]
     if today == str(last_day):
+        print(today)
         send_email()
     else:
         print(today,"not last day")
