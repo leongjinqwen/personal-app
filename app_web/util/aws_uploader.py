@@ -23,7 +23,7 @@ def upload_image_to_s3(file, acl="public-read"):
         )
 
     except Exception as e:
-        logger.logger.error(f"Error Occured During Upload: {e}")
+        print(f"Error Occured During Upload: {e}")
         return e
 
     return f"http://{os.getenv('S3_BUCKET_NAME')}.s3.amazonaws.com/{file.filename}"
