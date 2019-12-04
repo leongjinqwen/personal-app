@@ -3,7 +3,13 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
+  <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+    <ul class="navbar-nav">
+      <div></div>
+    </ul>
+    <ul class="navbar-nav">
+      <div id="timer">Today is {{ today }} !</div>
+    </ul>
     <ul class="navbar-nav">
       {% if current_user.is_authenticated %}
       <li class="nav-item dropdown">
@@ -22,6 +28,14 @@
         <div class="dropdown-menu" aria-labelledby="expensesDropdown">
           <a class="nav-link dropdown-item" href="{{url_for('expenses.new')}}">Add</a>
           <a class="nav-link dropdown-item" href="{{url_for('expenses.category',category='all')}}">List</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Profile
+        </a>
+        <div class="dropdown-menu" aria-labelledby="profileDropdown">
+          <a class="nav-link dropdown-item" href="{{url_for('statements.index')}}">Statement</a>
         </div>
       </li>
       <li class="nav-item">

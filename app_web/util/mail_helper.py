@@ -38,7 +38,7 @@ def send_email():
     users = User.select()
     # get all expenses to render in template
     for user in users:
-        month = date.today().strftime("%B")
+        month = date.today().strftime("%B %Y")
         record = Statement.get_or_none(Statement.user==user.id,Statement.month==month)
         if not record:
             category = 'all'

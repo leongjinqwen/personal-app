@@ -62,9 +62,4 @@ def update(id):
             return render_template('expenses/edit.html',expense=expense) 
     return render_template('sessions/new.html')  
 
-# @expenses_blueprint.route('/<category>/export',methods=["GET"])
-# def export(category):
-#     url = f"{os.environ.get('DOMAIN')}/expenses/{category}"
-#     pdfkit.from_url(url, 'output.pdf')
-#     return url
     

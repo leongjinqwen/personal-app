@@ -1,0 +1,38 @@
+{% extends "_layout.html" %}
+{% block title %}
+  New Reminder
+{% endblock %}
+{% block content %}
+<h1>Statement</h1>
+<select name='month' class="custom-select" id="select1">
+    <option selected>Choose...</option>
+    {% for s in statements %}
+    <option value="{{s.month}}">{{s.month}}</option>
+    {% endfor %}
+</select>
+<div id="link" class="mt-3 ml-2"></div>
+<script src="http://code.jquery.com/jquery-3.3.1.js"></script>
+<script>
+    $("#select1").change(function(e){
+        let month = String(e.target.value)
+        $.ajax({
+            type: "GET",
+            url: `http://localhost:5000/statements/${month}`,
+            data: {
+              'month': month,
+            },
+            success: function(data) {
+              if (data.ok){
+                $("#link").html(`
+                    <a href=${data.exp_url}>${e.target.value}'s statement</a>
+                `)
+              }
+            },
+            error: function(resp) {
+              console.log(resp)
+            }
+        });
+        
+    })
+</script>
+{% endblock %}

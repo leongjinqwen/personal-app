@@ -7,4 +7,4 @@ from datetime import date
 class Statement(BaseModel):
     user = pw.ForeignKeyField(User, backref='statements')
     exp_url = pw.CharField(null=True)
-    month = pw.CharField(default=date.today().strftime("%B"))
+    month = pw.CharField(default=date.today().strftime("%B %Y"))
