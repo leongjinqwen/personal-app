@@ -46,9 +46,7 @@ def email_statement():
     month = date.today().strftime("%m")
     today = date.today().strftime("%d")
     last_day = monthrange(int(year),int(month))[1]
-    utc_today = int(today)+1
-    print(utc_today)
-    if utc_today == last_day:
+    if today == last_day:
         send_email()
     else:
         print(today,"not last day")
