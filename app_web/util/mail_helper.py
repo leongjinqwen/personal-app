@@ -46,7 +46,7 @@ def send_email():
             ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==user.id,Expense.month==date.today().strftime("%b"))
             # upload to aws
             html = render_template('expenses/statement.html',expenses=expenses,ttl=ttl,cat=category.title(),month=str(month))
-            pdf_name = (user.username).replace(" ", "-").lower() + "-" + str(month)
+            pdf_name = (user.username).replace(" ", "-").lower() + "-" + str(month).replace(" ", "-")
             temp_file = create_pdf(html, pdf_name)
             statement_url = upload_image_to_s3(temp_file)
             print(statement_url)
