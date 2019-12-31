@@ -24,8 +24,12 @@ def send_email():
             return pdfkit.configuration()
 
     def create_pdf(pdf_content, filename):
+        options = {
+            'margin-top': '0.75in',
+            'margin-bottom': '0.75in',
+        }
         pdf = pdfkit.from_string(
-            pdf_content, False, configuration=_get_pdfkit_config())
+            pdf_content, False, configuration=_get_pdfkit_config(), options=options)
         temp_file = tempfile.TemporaryFile()
         temp_file.filename = filename
         temp_file.content_type = "application/pdf"
