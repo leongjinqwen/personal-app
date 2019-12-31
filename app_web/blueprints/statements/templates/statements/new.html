@@ -16,7 +16,7 @@
         let month = String(e.target.value)
         $.ajax({
             type: "GET",
-            url: `http://localhost:5000/statements/${month}`,
+            url: `https://personal-mgt-app.herokuapp.com/statements/${month}`,
             data: {
               'month': month,
             },
