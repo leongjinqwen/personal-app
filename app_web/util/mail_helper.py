@@ -49,6 +49,7 @@ def send_email():
             pdf_name = (user.username).replace(" ", "-").lower() + "-" + str(month)
             temp_file = create_pdf(html, pdf_name)
             statement_url = upload_image_to_s3(temp_file)
+            print(statement_url)
             statement = Statement(user=user.id,exp_url=statement_url,month=month)
             statement.save()
             # send email with link

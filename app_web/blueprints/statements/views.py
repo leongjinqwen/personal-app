@@ -19,6 +19,7 @@ def index():
 @statements_blueprint.route('/<month>', methods=['GET'])
 def show(month):
     statement = Statement.get_or_none(Statement.month==month,Statement.user==current_user.id)
+    print("url",statement.exp_url)
     return jsonify({
             "ok": True,
             "exp_url": statement.exp_url
