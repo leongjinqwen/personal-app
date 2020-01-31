@@ -22,7 +22,8 @@ def new():
 @expenses_blueprint.route('/<user_id>', methods=['POST'])
 def create(user_id):
     user = User.get_by_id(user_id)
-    expense = Expense(category=request.form.get('category'),amount=request.form.get('amount'),source=request.form.get('source'),description=request.form.get('desc'))
+    category = Category.get_by_id(request.form.get('category'))
+    expense = Expense(cat=category,category=category.name,amount=request.form.get('amount'),source=request.form.get('source'),description=request.form.get('desc'))
     if expense.save():
         flash("Successfully create expense record.","primary")
         return redirect(url_for('expenses.category',category="all"))
@@ -36,14 +37,12 @@ def category(category):
     if current_user.is_authenticated:
         if category == 'all':
             categories = Category.select().where(Category.user==current_user.id)
-            expenses = Expense.select().where(Expense.category in categories,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
-            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.category in categories,Expense.month==date.today().strftime("%b"))
+            expenses = Expense.select().where(Expense.cat in categories,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
+            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in categories,Expense.month==date.today().strftime("%b"))
         else:
             selected = Category.get(Category.name==category.title())
-            # categories = Category.select().where(Category.user==current_user.id,Category.name==category.title())
-            expenses = Expense.select().where(Expense.category==selected.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
-            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.category==selected.id,Expense.month==date.today().strftime("%b"))
-            print(ttl[0].total)
+            expenses = Expense.select().where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
+            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b"))
         return render_template('expenses/show.html',expenses=expenses,ttl=ttl,cat=category.title())
     return render_template('sessions/new.html')  
 
@@ -57,7 +56,8 @@ def update(id):
     if current_user.is_authenticated:
         expense = Expense.get_by_id(id)
         category = Category.get(Category.name==request.form.get('category'))
-        expense.category = category.id
+        expense.cat = category.id
+        expense.category = category.name
         expense.source = request.form.get('source')
         expense.desc = request.form.get('desc')
         expense.amount = request.form.get('amount')

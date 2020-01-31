@@ -6,7 +6,7 @@ from playhouse.hybrid import hybrid_property
 from datetime import date
 
 class Expense(BaseModel):
-    cat = pw.ForeignKeyField(Category, backref='expenses',default=1 )
+    cat = pw.ForeignKeyField(Category, backref='expenses' )
     category = pw.CharField(null=False)
     description = pw.CharField(null=False)
     amount = pw.DecimalField(decimal_places=2,default=0)
