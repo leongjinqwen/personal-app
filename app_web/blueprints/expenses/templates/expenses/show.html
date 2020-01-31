@@ -8,9 +8,9 @@
     border-left:1px solid #dee2e6;
     border-right:1px solid #dee2e6;
   }
-  th {
+  /* th {
     background-color: rgb(203, 250, 234);
-  }
+  } */
   table {
     border-top: 1px solid #dee2e6;
     border-bottom: 1px solid #dee2e6;
@@ -46,7 +46,7 @@
         </a>
       </td>
       <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
-      <td>{{expense.category}}</td>
+      <td>{{expense.category.name}}</td>
       <td>{{expense.source}}</td>
       <td>{{expense.description}}</td>
       <td>RM {{expense.amount}}</td>
