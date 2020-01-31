@@ -51,3 +51,10 @@ def email_statement():
         send_email()
     else:
         print(today,"not last day")
+
+@app.cli.command("seed",short_help='Seed database')
+def seed():
+    from app_web.util.seed import create_cat,change_cat
+    create_cat()
+    change_cat
+    print("Seed finish!")
