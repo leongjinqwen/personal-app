@@ -1,0 +1,12 @@
+{% extends "_layout.html" %}
+{% block title %}
+Summary List
+{% endblock %}
+{% block content %}
+{% for month in months %}
+<li>
+    <a href="{{url_for('expenses.summary',month=month)}}">{{month}}'s summary</a>
+</li>
+{% endfor %}
+
+{% endblock %}
