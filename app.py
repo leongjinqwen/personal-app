@@ -56,5 +56,6 @@ def email_statement():
 def seed():
     from app_web.util.seed import create_cat,change_cat
     create_cat()
-    change_cat
+    print("creat category...")
+    # change_cat()
     print("Seed finish!")
