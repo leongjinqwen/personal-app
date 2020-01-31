@@ -54,8 +54,6 @@ def email_statement():
 
 @app.cli.command("seed",short_help='Seed database')
 def seed():
-    from app_web.util.seed import create_cat
-    create_cat()
-    print("creat category...")
-    # change_cat()
+    from app_web.util.seed import change_cat
+    change_cat()
     print("Seed finish!")
