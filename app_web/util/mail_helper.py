@@ -5,6 +5,7 @@ import pdfkit
 from models.user import User
 from models.expense import Expense
 from models.statement import Statement
+from models.category import Category
 import tempfile
 import subprocess
 from .aws_uploader import upload_image_to_s3
@@ -41,8 +42,8 @@ def send_email():
         month = date.today().strftime("%B %Y")
         record = Statement.get_or_none(Statement.user==user.id,Statement.month==month)
         if not record:
-            category = 'all'
-            expenses = Expense.select().where(Expense.user==user.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
+            expenses = Expense.select().where(Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
+            # expenses = Expense.select().where(Expense.user==user.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
             ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==user.id,Expense.month==date.today().strftime("%b"))
             # upload to aws
             html = render_template('expenses/statement.html',expenses=expenses,ttl=ttl,cat=category.title(),month=str(month))
