@@ -44,7 +44,8 @@ def send_email():
         if not record:
             expenses = Expense.select().where(Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
             # expenses = Expense.select().where(Expense.user==user.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
-            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==user.id,Expense.month==date.today().strftime("%b"))
+            # ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==user.id,Expense.month==date.today().strftime("%b"))
+            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.month==date.today().strftime("%b"))
             # upload to aws
             html = render_template('expenses/statement.html',expenses=expenses,ttl=ttl,cat=category.title(),month=str(month))
             pdf_name = (user.username).replace(" ", "-").lower() + "-" + str(month).replace(" ", "-")
