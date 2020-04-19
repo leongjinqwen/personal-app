@@ -42,6 +42,7 @@ def send_email():
         month = date.today().strftime("%B %Y")
         record = Statement.get_or_none(Statement.user==user.id,Statement.month==month)
         if not record:
+            category = 'all'
             expenses = Expense.select().where(Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
             # expenses = Expense.select().where(Expense.user==user.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
             # ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==user.id,Expense.month==date.today().strftime("%b"))
