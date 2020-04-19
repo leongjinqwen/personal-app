@@ -57,3 +57,11 @@ def seed():
     from app_web.util.seed import change_cat
     change_cat()
     print("Seed finish!")
+
+@app.cli.command("statement",short_help='generate statement')
+def statement():
+
+    from app_web.util.mail_helper import send_email
+    print('run generate and email')
+    send_email()
+    print('Done')
