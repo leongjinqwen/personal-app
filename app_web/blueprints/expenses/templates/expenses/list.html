@@ -5,7 +5,7 @@ Summary List
 {% block content %}
 {% for month in months %}
 <li>
-    <a href="{{url_for('expenses.summary',month=month)}}">{{month}}'s summary</a>
+    <a href="{{url_for('expenses.summary',month_year=month)}}">{{month}}'s summary</a>
 </li>
 {% endfor %}
 

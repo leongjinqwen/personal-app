@@ -74,23 +74,26 @@ def summary_list():
     months = [] 
     for cat in current_user.categories:
         for expense in cat.expenses:
-            if not expense.month in months:
-                months.append(expense.month)
+            if not f"{expense.month}-{expense.created_at.year}" in months:
+                months.append(f"{expense.month}-{expense.created_at.year}")
     return render_template('expenses/list.html',months=months)
 
-@expenses_blueprint.route('/<month>/summary',methods=["GET"])
-def summary(month):
+@expenses_blueprint.route('/<month_year>/summary',methods=["GET"])
+def summary(month_year):
     month_exp = []
     for cat in current_user.categories:
         cat_exp = []
         for expense in cat.expenses:
-            if expense.month == month.title():
+            mth_yr = month_year.split('-')
+            month = mth_yr[0]
+            year = mth_yr[1]
+            if expense.month == month.title() and expense.created_at.year == int(year):
                 cat_exp.append(expense)
         month_exp.append({
             "name":cat.name,
             "expenses":cat_exp
         })
-    total = Expense.select().where(Expense.month==month.title())
+    total = Expense.select().where(Expense.month==month.title(), Expense.created_at.year==year)
     return render_template('expenses/summary.html',month_exp=month_exp,month=month,total=total)
 
  
