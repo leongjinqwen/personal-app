@@ -12,8 +12,11 @@
     <ul class="navbar-nav">
       <div></div>
     </ul>
-    <ul class="navbar-nav">
-      <div id="timer">Today is {{ today }} !</div>
+    <ul class="navbar-nav d-flex icon-text align-items-center ">
+      <span class="icon has-text-dark">
+        <i class="fas fa-calendar"></i>
+      </span>
+      <span class="text-dark">Today is {{ today }} !</span>
     </ul>
     <ul class="navbar-nav">
       {% if current_user.is_authenticated %}
@@ -67,7 +70,6 @@
               <i class="fas fa-file-download"></i>
             </span>
             <span class="text-dark">Monthly Statement</span>
-            
           </a>
         </div>
       </li>
@@ -81,10 +83,20 @@
       </li>
       {% else %}
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('sessions.new')}}">Sign In</a>
+        <a class="nav-link d-flex icon-text align-items-center " href="{{url_for('sessions.new')}}">
+          <span class="icon has-text-dark">
+            <i class="fas fa-sign-in-alt"></i>
+          </span>
+          <span class="text-dark">Sign In</span>
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('users.new')}}">Sign Up</a>
+        <a class="nav-link d-flex icon-text align-items-center " href="{{url_for('users.new')}}">
+          <span class="icon has-text-dark">
+            <i class="fas fa-user-plus"></i>
+          </span>
+          <span class="text-dark">Sign Up</span>
+        </a>
       </li>
       {% endif %}
     </ul>

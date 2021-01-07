@@ -1,3 +1,4 @@
+import os
 from datetime import date
 
 def register_jinja_filters(app):
@@ -8,3 +9,7 @@ def register_jinja_filters(app):
     @app.context_processor
     def inject_today():
         return {'today': date.today().strftime("%d %B %Y")}
+
+    @app.template_filter()
+    def getenv(text):
+        return os.getenv(text)

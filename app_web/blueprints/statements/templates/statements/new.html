@@ -1,38 +1,62 @@
 {% extends "_layout.html" %}
 {% block title %}
-  New Reminder
+  Monthly Statement
 {% endblock %}
 {% block content %}
-<h1>Statement</h1>
-<select name='month' class="custom-select" id="select1">
-    <option selected>Choose...</option>
-    {% for s in statements %}
-    <option value="{{s.month}}">{{s.month}}</option>
-    {% endfor %}
-</select>
-<div id="link" class="mt-3 ml-2"></div>
+<section class="hero is-dark">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Your Monthly Statements </h1>
+      <h3 class="subtitle">Number of Statements : {{ statements |length }}</h3>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="panel-block">
+    <select name='month' class="control custom-select input is-info" id="select1">
+      <option selected>Choose...</option>
+      {% for s in statements %}
+      <option value="{{s.month}}">{{s.month}}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div id="link"></div>
+</div>
+
 <script>
-    $("#select1").change(function(e){
-        let month = String(e.target.value)
-        $.ajax({
-            type: "GET",
-            url: `https://personal-mgt-app.herokuapp.com/statements/${month}`,
-            data: {
-              'month': month,
-            },
-            success: function(data) {
-              if (data.ok){
-                console.log(data)
-                $("#link").html(`
-                    <a href=${data.exp_url}>${e.target.value}'s statement</a>
-                `)
-              }
-            },
-            error: function(resp) {
-              console.log(resp)
-            }
-        });
-        
-    })
+  const dev = {
+    apiUrl: 'http://localhost:5000',
+  }
+  const prod = {
+    apiUrl: 'https://personal-mgt-app.herokuapp.com',
+  }
+  const config = "{{ 'FLASK_ENV' | getenv }}" == 'production' ? prod : dev
+
+  $("#select1").change(function(e){
+    let month = String(e.target.value)
+    $.ajax({
+      type: "GET",
+      url: `${config.apiUrl}/statements/${month}`,
+      data: {
+        'month': month,
+      },
+      success: function(data) {
+        if (data.ok){
+          $("#link").html(`
+            <a class="panel-block" href="${data.exp_url}" target="_blank">
+              <span class="panel-icon has-text-link">
+                <i class="fas fa-file-download"></i>
+              </span>
+              <span class="text-dark">${e.target.value}'s statement</span>
+            </a>
+          `)
+        }
+      },
+      error: function(resp) {
+        console.log(resp)
+      }
+    });
+  })
 </script>
 {% endblock %}

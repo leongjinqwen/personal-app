@@ -1,12 +1,23 @@
 {% extends "_layout.html" %}
 {% block title %}
-Summary List
+  Summary List
 {% endblock %}
+
 {% block content %}
-{% for month in months %}
-<li>
-    <a href="{{url_for('expenses.summary',month_year=month)}}">{{month}}'s summary</a>
-</li>
-{% endfor %}
+<div class="container">
+  <nav class="panel is-link">
+    <p class="panel-heading">
+      Monthly Expenses Summary
+    </p>
+    {% for month in months %}
+      <a class="panel-block" href="{{url_for('expenses.summary',month_year=month)}}">
+        <span class="panel-icon has-text-link">
+          <i class="fas fa-clipboard-list"></i>
+        </span>
+        <span class="text-dark">{{month}}</span>
+      </a>
+    {% endfor %}
+  </nav>
+</div>
 
 {% endblock %}

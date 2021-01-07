@@ -16,35 +16,43 @@
     .tab-item:hover {
       text-decoration: none;
     }
-
   </style>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <h3>Expenses statement for 
-    <span class="tag is-info is-medium is-rounded">{{ today_date }}</span>
-  </h3>
-  <h5>Category : <span class="tag is-success is-medium is-rounded">{{ cat }}</span></h5>
-  <div class="tabs m-0">
-    <ul>
-      <li class="{{ 'is-active' if cat=='All' }}" >
-        <a class="tab-item" href="{{url_for('expenses.category',category='all')}}">All</a>
-      </li>
-      <li class="{{ 'is-active' if cat=='Food' }}" >
-        <a class="tab-item" href="{{url_for('expenses.category',category='food')}}">Food</a>
-      </li>
-      <li class="{{ 'is-active' if cat=='Transport' }}" >
-        <a class="tab-item" href="{{url_for('expenses.category',category='transport')}}">Transport</a>
-      </li>
-      <li class="{{ 'is-active' if cat=='Entertainment' }}" >
-        <a class="tab-item" href="{{url_for('expenses.category',category='entertainment')}}">Entertainment</a>
-      </li>
-      <li class="{{ 'is-active' if cat=='General' }}" >
-        <a class="tab-item" href="{{url_for('expenses.category',category='general')}}">General</a>
-      </li>
-    </ul>
+<section class="hero is-dark">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Expenses Statement </h1>
+      <h3 class="subtitle">for {{ today_date }}</h3>  
+    </div>
   </div>
+  <div class="hero-foot">
+    <nav class="tabs is-boxed m-0">
+      <div class="container">
+        <ul>
+          <li class="{{ 'is-active' if cat=='All' }}" >
+            <a class="tab-item" href="{{url_for('expenses.category',category='all')}}">All</a>
+          </li>
+          <li class="{{ 'is-active' if cat=='Food' }}" >
+            <a class="tab-item" href="{{url_for('expenses.category',category='food')}}">Food</a>
+          </li>
+          <li class="{{ 'is-active' if cat=='Transport' }}" >
+            <a class="tab-item" href="{{url_for('expenses.category',category='transport')}}">Transport</a>
+          </li>
+          <li class="{{ 'is-active' if cat=='Entertainment' }}" >
+            <a class="tab-item" href="{{url_for('expenses.category',category='entertainment')}}">Entertainment</a>
+          </li>
+          <li class="{{ 'is-active' if cat=='General' }}" >
+            <a class="tab-item" href="{{url_for('expenses.category',category='general')}}">General</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<div class="container">
   <table class="table is-hoverable">
     <thead>
       <tr>
@@ -94,8 +102,8 @@
         </tr>
     </tbody>
   </table>
-  <button id="printButton" class="btn btn-success" onclick="window.print()" >Print Statement</button>
   <a class="btn btn-primary" href="{{url_for('expenses.new')}}" >Add New Expenses</a>
+  <button id="printButton" class="btn btn-success" onclick="window.print()" >Print Statement</button>
 </div>
 
 {% endblock %}
