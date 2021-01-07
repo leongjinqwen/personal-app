@@ -97,9 +97,6 @@ def dashboard():
     return last_twelve
 
   twelve = _get_last_twelve(current)
-  
-  
-  
   '''
   datum = [
     "Jan, 2021": {

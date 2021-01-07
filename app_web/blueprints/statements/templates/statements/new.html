@@ -13,50 +13,14 @@
 </section>
 
 <div class="container">
-  <div class="panel-block">
-    <select name='month' class="control custom-select input is-info" id="select1">
-      <option selected>Choose...</option>
-      {% for s in statements %}
-      <option value="{{s.month}}">{{s.month}}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div id="link"></div>
+  {% for s in statements %}
+    <a class="panel-block" href="{{s.exp_url}}" target="_blank">
+      <span class="panel-icon has-text-link">
+        <i class="fas fa-file-download"></i>
+      </span>
+      <span class="text-dark">{{s.month}}'s statement</span>
+    </a>
+  {% endfor %}
 </div>
 
-<script>
-  const dev = {
-    apiUrl: 'http://localhost:5000',
-  }
-  const prod = {
-    apiUrl: 'https://personal-mgt-app.herokuapp.com',
-  }
-  const config = "{{ 'FLASK_ENV' | getenv }}" == 'production' ? prod : dev
-
-  $("#select1").change(function(e){
-    let month = String(e.target.value)
-    $.ajax({
-      type: "GET",
-      url: `${config.apiUrl}/statements/${month}`,
-      data: {
-        'month': month,
-      },
-      success: function(data) {
-        if (data.ok){
-          $("#link").html(`
-            <a class="panel-block" href="${data.exp_url}" target="_blank">
-              <span class="panel-icon has-text-link">
-                <i class="fas fa-file-download"></i>
-              </span>
-              <span class="text-dark">${e.target.value}'s statement</span>
-            </a>
-          `)
-        }
-      },
-      error: function(resp) {
-        console.log(resp)
-      }
-    });
-  })
-</script>
 {% endblock %}
