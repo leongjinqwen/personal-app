@@ -1,5 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand icon-text align-items-center" href="/">
+    <span class="icon has-text-dark">
+      <i class="fas fa-home"></i>
+    </span>
+    <span class="text-dark">Home</span>
+  </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -12,7 +17,7 @@
     </ul>
     <ul class="navbar-nav">
       {% if current_user.is_authenticated %}
-      <li class="nav-item dropdown">
+      <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="reminderDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Reminder
         </a>
@@ -20,27 +25,59 @@
           <a class="nav-link dropdown-item" href="{{url_for('reminders.new')}}">Add</a>
           <a class="nav-link dropdown-item" href="{{url_for('reminders.show',group='all')}}">List</a>
         </div>
-      </li>
+      </li> -->
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Expenses
+        <a class="nav-link d-flex icon-text align-items-center dropdown-toggle" href="#" id="expensesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="icon has-text-dark">
+            <i class="fas fa-wallet"></i>
+          </span>
+          <span class="text-dark">Expenses</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="expensesDropdown">
-          <a class="nav-link dropdown-item" href="{{url_for('expenses.new')}}">Add</a>
-          <a class="nav-link dropdown-item" href="{{url_for('expenses.category',category='all')}}">List</a>
-          <a class="nav-link dropdown-item" href="{{url_for('expenses.summary_list')}}">Summary</a>
+          <a class="nav-link d-flex icon-text align-items-center dropdown-item" href="{{url_for('expenses.new')}}">
+            <span class="icon has-text-dark">
+              <i class="fas fa-plus-square"></i>
+            </span>
+            <span class="text-dark">Add</span>
+          </a>
+          <a class="nav-link d-flex icon-text align-items-center dropdown-item" href="{{url_for('expenses.category',category='all')}}">
+            <span class="icon has-text-dark">
+              <i class="fas fa-list-alt"></i>
+            </span>
+            <span class="text-dark">Expenses Listing</span>
+          </a>
+          <a class="nav-link d-flex icon-text align-items-center dropdown-item" href="{{url_for('expenses.summary_list')}}">
+            <span class="icon has-text-dark">
+              <i class="fas fa-folder"></i>
+            </span>
+            <span class="text-dark">Monthly Summary</span>
+          </a>
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Profile
+        <a class="nav-link d-flex icon-text align-items-center dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="icon has-text-dark">
+            <i class="fas fa-user-circle"></i>
+          </span>
+          <span class="text-dark">Profile</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="profileDropdown">
-          <a class="nav-link dropdown-item" href="{{url_for('statements.index')}}">Statement</a>
+          <a class="nav-link d-flex icon-text align-items-center dropdown-item" href="{{url_for('statements.index')}}">
+            <span class="icon has-text-dark">
+              <i class="fas fa-file-download"></i>
+            </span>
+            <span class="text-dark">Monthly Statement</span>
+            
+          </a>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{url_for('sessions.logout')}}">Logout</a>
+        <a class="nav-link d-flex icon-text align-items-center " href="{{url_for('sessions.logout')}}">
+          <span class="icon has-text-dark">
+            <i class="fas fa-sign-out-alt"></i>
+          </span>
+          <span class="text-dark">Logout</span>
+        </a>
       </li>
       {% else %}
       <li class="nav-item">

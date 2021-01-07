@@ -2,78 +2,100 @@
 {% block title %}
   Expenses
 {% endblock %}
-{% block header %}
-<style>
-  td,th {
-    border-left:1px solid #dee2e6;
-    border-right:1px solid #dee2e6;
-  }
-  /* th {
-    background-color: rgb(203, 250, 234);
-  } */
-  table {
-    border-top: 1px solid #dee2e6;
-    border-bottom: 1px solid #dee2e6;
-  }
 
-</style>
+{% block header %}
+  <style>
+    td,th {
+      border-left:1px solid #dee2e6;
+      border-right:1px solid #dee2e6;
+    }
+    table {
+      border-top: 1px solid #dee2e6;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .tab-item:hover {
+      text-decoration: none;
+    }
+
+  </style>
 {% endblock %}
+
 {% block content %}
-<h3>Expenses statement of {{ today_date }}</h3>
-<h5>Category : {{ cat }}</h5>
-<a class="btn" href="{{url_for('expenses.category',category='all')}}">Show All</a>
-<a class="btn" href="{{url_for('expenses.category',category='food')}}">Food</a>
-<a class="btn" href="{{url_for('expenses.category',category='transport')}}">Transport</a>
-<a class="btn" href="{{url_for('expenses.category',category='entertainment')}}">Entertainment</a>
-<a class="btn" href="{{url_for('expenses.category',category='general')}}">General</a>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Date</th>
-      <th scope="col">Category</th>
-      <th scope="col">Source</th>
-      <th scope="col">Description</th>
-      <th scope="col">Amount</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for expense in expenses %}
-    <tr>
-      <td>
-        <a href="{{url_for('expenses.edit',id=expense.id)}}">
-          {{expense.id}}
-        </a>
-      </td>
-      <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
-      <td>{{expense.cat.name}}</td>
-      <td>{{expense.source}}</td>
-      <td>{{expense.description}}</td>
-      <td>RM {{expense.amount}}</td>
-    </tr>
-    {% endfor %}
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-          <strong>
-            Total Expenses : 
-          </strong>
-        </td>
-        <td>
-          <strong>
-            RM 
-            {% if ttl[0].total == None %}
-              0.00
-            {% else %}
-              {{ttl[0].total}}
-            {% endif %}
-          </strong>
-        </td>
+<div class="container">
+  <h3>Expenses statement for 
+    <span class="tag is-info is-medium is-rounded">{{ today_date }}</span>
+  </h3>
+  <h5>Category : <span class="tag is-success is-medium is-rounded">{{ cat }}</span></h5>
+  <div class="tabs m-0">
+    <ul>
+      <li class="{{ 'is-active' if cat=='All' }}" >
+        <a class="tab-item" href="{{url_for('expenses.category',category='all')}}">All</a>
+      </li>
+      <li class="{{ 'is-active' if cat=='Food' }}" >
+        <a class="tab-item" href="{{url_for('expenses.category',category='food')}}">Food</a>
+      </li>
+      <li class="{{ 'is-active' if cat=='Transport' }}" >
+        <a class="tab-item" href="{{url_for('expenses.category',category='transport')}}">Transport</a>
+      </li>
+      <li class="{{ 'is-active' if cat=='Entertainment' }}" >
+        <a class="tab-item" href="{{url_for('expenses.category',category='entertainment')}}">Entertainment</a>
+      </li>
+      <li class="{{ 'is-active' if cat=='General' }}" >
+        <a class="tab-item" href="{{url_for('expenses.category',category='general')}}">General</a>
+      </li>
+    </ul>
+  </div>
+  <table class="table is-hoverable">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Date</th>
+        <th scope="col">Category</th>
+        <th scope="col">Source</th>
+        <th scope="col">Description</th>
+        <th scope="col">Amount</th>
       </tr>
-  </tbody>
-</table>
-<button id="printButton" class="btn btn-primary" onclick="window.print()" >Print Statement</button>
+    </thead>
+    <tbody>
+      {% for expense in expenses %}
+      <tr>
+        <td>
+          <a href="{{url_for('expenses.edit',id=expense.id)}}">
+            {{expense.id}}
+          </a>
+        </td>
+        <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
+        <td>{{expense.cat.name}}</td>
+        <td>{{expense.source}}</td>
+        <td>{{expense.description}}</td>
+        <td>RM {{expense.amount}}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <strong>
+              Total Expenses : 
+            </strong>
+          </td>
+          <td>
+            <strong>
+              RM 
+              {% if ttl[0].total == None %}
+                0.00
+              {% else %}
+                {{ttl[0].total}}
+              {% endif %}
+            </strong>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  <button id="printButton" class="btn btn-success" onclick="window.print()" >Print Statement</button>
+  <a class="btn btn-primary" href="{{url_for('expenses.new')}}" >Add New Expenses</a>
+</div>
+
 {% endblock %}

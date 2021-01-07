@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template
+from flask import render_template, redirect, url_for
 from app_web.blueprints.users.views import users_blueprint
 from app_web.blueprints.sessions.views import sessions_blueprint
 from app_web.blueprints.expenses.views import expenses_blueprint
@@ -10,6 +10,7 @@ from .util.assets import bundles
 from .util.jinja_filter import register_jinja_filters
 import os
 import sendgrid
+from flask_login import current_user
 
 register_jinja_filters(app)
 sg = sendgrid.SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
@@ -29,4 +30,6 @@ def internal_server_error(e):
 
 @app.route("/")
 def home():
+    if current_user.is_authenticated:
+        return redirect(url_for('users.dashboard'))
     return render_template('home.html')

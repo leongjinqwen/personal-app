@@ -1,0 +1,152 @@
+{% extends "_layout.html" %}
+{% block title %}
+  Dashboard
+{% endblock %}
+{% block header %}
+  <style>
+    #dashboard {
+      min-height: 100vh;
+      background-color: #303a52;
+    }
+    .chart-item {
+      background-color: #0e153a;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+<div id="dashboard" class="text-light p-5">
+  <div class="columns is-desktop is-multiline">
+    <div class="column is-full">
+      <canvas id="mainChart" class="chart-item box"></canvas>
+    </div>
+    <div class="column is-half ">
+      <canvas id="catChart" class="chart-item box" ></canvas>
+    </div>
+    <div class="column is-half">
+      <canvas id="pieChart" class="chart-item box" ></canvas>
+    </div>
+    <div class="column is-half">
+      <canvas id="testChart" class="chart-item box"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  const bgColors = [
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 206, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(255, 159, 64, 0.2)'
+  ]
+  const borderColors = [
+    'rgba(255, 99, 132, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)'
+  ]
+  Chart.defaults.global.defaultFontColor = 'white';
+
+  // dataset from db
+  const labels = {{ labels | safe }} ;
+  const values = {{ data | safe }} ;
+  const mainLabels = {{ main_labels | safe }} ;
+  const mainValues = {{ main_values | safe }} ;
+
+  var mainCtx = document.getElementById('mainChart');
+  var lineChart = new Chart(mainCtx, {
+    type: 'line',
+    data: {
+      labels:  mainLabels,
+      datasets: [{
+        label: 'Monthly Expenses',
+        data: mainValues,
+        backgroundColor: bgColors,
+        borderColor: borderColors,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Total Expenses for Last 12 Months',
+        position: 'top',
+        fontSize: 16,
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            callback: function(value, index, values) {
+              return '$' + value + '.00';
+            }
+          }
+        }]
+      }
+    }
+  });
+
+  var barCtx = document.getElementById('catChart');
+  
+  var catChart = new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      // category of expenses for current month
+      labels:  labels,
+      datasets: [{
+        label: 'Total Amount',
+        data:  values,
+        backgroundColor: bgColors,
+        borderColor: borderColors,
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Expenses for {{ month_year | safe }}',
+        position: 'top',
+        fontSize: 16,
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            callback: function(value, index, values) {
+              return '$' + value + '.00';
+            }
+          }
+        }]
+      }
+    }
+  });
+  var pieCtx = document.getElementById('pieChart');
+
+  var pieChart = new Chart(pieCtx, {
+    type: 'pie',
+    data:  {
+      labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: bgColors,
+        borderColor: borderColors,
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Composition of Expenses for {{ month_year | safe }}',
+        position: 'top',
+        fontSize: 16,
+      },
+      animation: { animateScale: true },
+    }
+  });
+</script>
+{% endblock %}
