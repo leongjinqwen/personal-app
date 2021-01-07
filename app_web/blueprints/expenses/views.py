@@ -7,6 +7,7 @@ from peewee import fn
 from datetime import date
 import os
 import pdfkit
+import datetime
 
 expenses_blueprint = Blueprint('expenses',
                             __name__,
@@ -34,15 +35,16 @@ def create(user_id):
 
 @expenses_blueprint.route('/<category>')
 def category(category):
+    current = datetime.datetime.now()
     if current_user.is_authenticated:
         if category == 'all':
             categories = Category.select().where(Category.user==current_user.id)
-            expenses = Expense.select().where(Expense.cat in categories,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
-            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in categories,Expense.month==date.today().strftime("%b"))
+            expenses = Expense.select().where(Expense.cat in categories,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
+            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in categories,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year)
         else:
             selected = Category.get(Category.name==category.title())
-            expenses = Expense.select().where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
-            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b"))
+            expenses = Expense.select().where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
+            ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year)
         return render_template('expenses/show.html',expenses=expenses,ttl=ttl,cat=category.title())
     return render_template('sessions/new.html')  
 
