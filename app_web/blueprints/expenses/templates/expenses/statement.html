@@ -2,13 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Expenses - {{ month }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <style>
-      body {
+      @page {
+        margin: 0;
+        font-size: 80%;
         font-family: 'Montserrat', sans-serif;
       }
       td,th {
@@ -25,40 +28,40 @@
     </style>
   </head>
   <body>
-    
-    <section class="hero is-dark">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">Expenses Statement </h1>
-          <h3 class="subtitle">for {{ month }}</h3>  
+    <div class="container is-fluid p-0">
+      <section class="hero is-dark">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">Expenses Statement </h1>
+            <h3 class="subtitle">for {{ month }}</h3>  
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <div class="container">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">No.</th>
-            <th scope="col">Date</th>
-            <th scope="col">Category</th>
-            <th scope="col">Source</th>
-            <th scope="col">Description</th>
-            <th scope="col">Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for expense in expenses %}
-          <tr>
-            <td>{{loop.index}}</td>
-            <td>{{expense.created_at.date().strftime("%d %b %Y")}}</td>
-            <td>{{expense.cat.name}}</td>
-            <td>{{expense.source}}</td>
-            <td>{{expense.description}}</td>
-            <td>$ {{expense.amount}}</td>
-          </tr>
-          {% endfor %}
-          <tr>
+      <div class="container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">Date</th>
+              <th scope="col">Category</th>
+              <th scope="col">Source</th>
+              <th scope="col">Description</th>
+              <th scope="col">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for expense in expenses %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{expense.created_at.date().strftime("%d %b %Y")}}</td>
+              <td>{{expense.cat.name}}</td>
+              <td>{{expense.source}}</td>
+              <td>{{expense.description}}</td>
+              <td>$ {{expense.amount}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
               <td></td>
               <td></td>
               <td></td>
@@ -74,9 +77,10 @@
                   {% endif %}
                 </strong>
               </td>
-            </tr>
-        </tbody>
-      </table>
+              </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>
