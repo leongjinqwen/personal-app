@@ -30,8 +30,8 @@ def create():
       flash(error,"danger")
     return render_template('users/new.html')
 
-
 @users_blueprint.route('/<username>', methods=["GET"])
+@login_required
 def show(username):
   return render_template('users/show.html',username=username)
 
@@ -51,6 +51,7 @@ def update(id):
   pass
 
 @users_blueprint.route('/dashboard', methods=["GET"])
+@login_required
 def dashboard():
 
   def _get_last_twelve(current):
