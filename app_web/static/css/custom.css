@@ -1,21 +1,43 @@
 body {
   margin: 0;
-  padding-bottom: 15px;
+  padding-bottom: 1.5rem;
   position: relative;
   min-height: 100vh;
+  font-family: 'Montserrat', sans-serif;
 }
 
 footer {
-  font-size: 11px;
+  margin-top: 2rem;
+  padding: 0.5rem;
+  font-size: 14px;
+  font-weight: 500;
   position: absolute;
-  bottom: 8px;
+  bottom: 0;
   left: 0;
   right: 0;
   text-align: center;
-  color: #303030;
+  color: white;
+  background-color: #1f2636;
 }
 
 footer a {
   text-decoration: none;
-  color: #303030;
+  color: #ace6f6;
+  font-weight: 600;
+}
+footer a:hover {
+  text-decoration: none;
+}
+
+#dashboard {
+  min-height: 100vh;
+  background-color: #303a52;
+}
+
+.chart-item {
+  background-color: #0e153a !important ;
+}
+
+#topnav {
+  background-color: #1f2636;
 }

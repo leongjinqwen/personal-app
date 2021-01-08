@@ -2,41 +2,43 @@
 {% block title %}
   Dashboard
 {% endblock %}
-{% block header %}
-  <style>
-    #dashboard {
-      min-height: 100vh;
-      background-color: #303a52;
-    }
-    .chart-item {
-      background-color: #0e153a;
-    }
-  </style>
-{% endblock %}
+
 {% block content %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 
 <div id="dashboard" class="text-light p-5">
   <div class="columns is-multiline">
+
     <div class="column is-full">
       <canvas id="mainChart" class="chart-item box"></canvas>
     </div>
-    <div class="column is-half ">
-      <select id="bar-month-select">
-        {% for month in month_labels %}
-          <option value="{{loop.index}}" {{'selected' if loop.index == 12 }}>{{month}}</option>
-        {% endfor %}
-      </select>
-      <canvas id="catChart" class="chart-item box" ></canvas>
-    </div>
+
     <div class="column is-half">
-      <select id="pie-month-select">
-        {% for month in month_labels %}
-          <option value="{{loop.index}}" {{'selected' if loop.index == 12 }}>{{month}}</option>
-        {% endfor %}
-      </select>
-      <canvas id="pieChart" class="chart-item box" ></canvas>
+      <div class="chart-item box text-right">
+        <div class="select is-rounded is-small">
+          <select id="bar-month-select">
+            {% for month in month_labels %}
+              <option value="{{loop.index}}" {{'selected' if loop.index == 12 }}>{{month}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <canvas id="catChart"></canvas>
+      </div>
     </div>
+
+    <div class="column is-half">
+      <div class="chart-item box text-right">
+        <div class="select is-rounded is-small">
+          <select id="pie-month-select">
+            {% for month in month_labels %}
+              <option value="{{loop.index}}" {{'selected' if loop.index == 12 }}>{{month}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <canvas id="pieChart"></canvas>
+      </div>
+    </div>
+
   </div>
 </div>
 

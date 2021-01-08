@@ -9,7 +9,8 @@
     {% assets "home_css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}">
       <link rel="stylesheet" media="print" href="/static/css/print.css">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     {% endassets %}
 
     {% assets "home_js" %}
@@ -28,8 +29,9 @@
   </head>
   <body>
     {% include "navbar.html" %}
-    <div class="">
-      <!-- flash message -->
+
+    <!-- flash message -->
+    <div>
       {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
           <ul class="flashes mt-1" style="list-style: none">
@@ -42,16 +44,11 @@
         {% endif %}
       {% endwith %}
     </div>
+
     <div class="container is-fullhd p-0">
       {% block content %}{% endblock %}
     </div>
-    <footer>
-      Made with &hearts; at <a target="_blank" href="https://www.nextacademy.com/?utm_source=github&utm_medium=student-challenge&utm_campaign=flask-nextagram">NEXT Academy</a>
-    </footer>
-    <script>
-      let timer = document.getElementById("timer")
-      let today = new Date()
-       
-    </script>
+    
+    {% include "_footer.html" %}
   </body>
 </html>
