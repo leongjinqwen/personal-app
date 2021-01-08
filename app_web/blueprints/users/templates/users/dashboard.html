@@ -126,6 +126,7 @@
       barValues.push(mainValues[label][barSelected])
     }
     barChart.data.datasets[0].data = barValues
+    barChart.options.title.text = `Expenses for ${monthLabels[barSelected]}`
     barChart.update()
   }
   const createBarChart = () => {
@@ -181,6 +182,7 @@
       pieValues.push(mainValues[label][pieSelected])
     }
     pieChart.data.datasets[0].data = pieValues
+    pieChart.options.title.text = `Composition of Expenses for ${monthLabels[pieSelected]}`
     pieChart.update()
   }
   const createPieChart = () => {
