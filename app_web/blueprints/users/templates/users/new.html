@@ -1,24 +1,40 @@
 {% extends "_layout.html" %}
 {% block title %}
-  New User
+  Sign Up
 {% endblock %}
 {% block content %}
-<h1>Sign Up</h1>
-<form action="{{url_for('users.create')}}" method="POST">      
-    <div class="form-group">
-        <label for="name">Username:</label>
-        <input type='text' required name='username' class="form-control" / >
-        <small class="text-muted">* Capital letter in this field will be saved as lowercase letter.</small>
+  <div id="sign-up-page">
+    <div class="form-item card">
+      <h1 class="subtitle">Sign Up</h1>
+      <form action="{{url_for('users.create')}}" method="POST">      
+        <div class="field">
+          <div class="control has-icons-left">
+            <input type='text' required name='username' placeholder="Username" class="input" />
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control has-icons-left">
+            <input type='email' required name='email' placeholder="Email" class="input" />
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control has-icons-left">
+            <input type='password' required name='password' placeholder="Password" class="input" />
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+          </div>
+        </div>
+        <button type="submit" class="button is-success is-fullwidth">Sign Up</button>
+        <p class="help">By tapping Sign Up, you agree to our Terms of Service and Privacy Policy.</p>
+      </form>
     </div>
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type='email' required name='email' class="form-control" / >
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type='password' required name='password' class="form-control" / >
-        <small class="text-muted">* By tapping Sign Up, you agree to our Terms of Service and Privacy Policy</small>
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Sign Up</button>
-</form>
+  </div>
+
 {% endblock %}

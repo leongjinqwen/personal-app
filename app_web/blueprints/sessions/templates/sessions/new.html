@@ -3,16 +3,28 @@
   Sign In
 {% endblock %}
 {% block content %}
-<h1>Users Sign In</h1>
-<form action="{{url_for('sessions.create')}}" method="POST">      
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type='email' required name='email' class="form-control" / >
+  <div id="sign-in-page">
+    <div class="form-item card">
+      <h1 class="subtitle">Sign In</h1>
+      <form action="{{url_for('sessions.create')}}" method="POST">      
+        <div class="field">
+          <div class="control has-icons-left">
+            <input type='email' required name='email' placeholder="Email" class="input" />
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control has-icons-left">
+            <input type='password' required name='password' placeholder="Password" class="input" />
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+          </div>
+        </div>
+        <button type="submit" class="button is-warning is-fullwidth">Sign In</button>
+      </form>
     </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type='password' required name='password' class="form-control" / >
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Sign In</button>
-</form>
+  </div>
 {% endblock %}
