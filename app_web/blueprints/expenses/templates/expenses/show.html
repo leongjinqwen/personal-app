@@ -73,7 +73,7 @@
         <td>{{expense.cat.name}}</td>
         <td>{{expense.source}}</td>
         <td>{{expense.description}}</td>
-        <td>RM {{expense.amount}}</td>
+        <td>$ {{expense.amount}}</td>
         <td>
           <a href="{{url_for('expenses.edit',id=expense.id)}}">
             <span class="icon is-small has-text-info">
@@ -93,7 +93,7 @@
           </td>
           <td>
             <strong>
-              RM 
+              $ 
               {% if ttl[0].total == None %}
                 0.00
               {% else %}
@@ -105,13 +105,13 @@
         </tr>
     </tbody>
   </table>
-  <a class="btn btn-primary" href="{{url_for('expenses.new')}}" >
+  <a id="hideButton" class="btn btn-primary" href="{{url_for('expenses.new')}}" >
     <span class="icon is-small">
       <i class="fas fa-plus"></i>
     </span> 
     <span>Expenses</span>
   </a>
-  <button id="printButton" class="btn btn-success" onclick="window.print()" >
+  <button class="btn btn-success" onclick="window.print()" >
     <span class="icon is-small">
       <i class="fas fa-print"></i>
     </span> 

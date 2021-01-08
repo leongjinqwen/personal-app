@@ -1,11 +1,15 @@
+@page {
+  margin: 0;
+}
+
 button {
-    display: none !important;
+  display: none !important;
 }
 
 a {
-    color: black;
+  color: black;
 }
 
-#printButton {
-    display: none;
+#hideButton, span.icon {
+  display: none !important;
 }
