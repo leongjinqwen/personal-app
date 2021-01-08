@@ -56,27 +56,29 @@
   <table class="table is-hoverable">
     <thead>
       <tr>
-        <th scope="col">Id</th>
+        <th scope="col">No.</th>
         <th scope="col">Date</th>
         <th scope="col">Category</th>
         <th scope="col">Source</th>
         <th scope="col">Description</th>
         <th scope="col">Amount</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       {% for expense in expenses %}
       <tr>
-        <td>
-          <a href="{{url_for('expenses.edit',id=expense.id)}}">
-            {{loop.index}}
-          </a>
-        </td>
-        <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>
+        <td>{{loop.index}}</td>
+        <td>{{expense.created_at.date().strftime("%d %b %Y")}}</td>
         <td>{{expense.cat.name}}</td>
         <td>{{expense.source}}</td>
         <td>{{expense.description}}</td>
         <td>RM {{expense.amount}}</td>
+        <td>
+          <a href="{{url_for('expenses.edit',id=expense.id)}}">
+
+          </a>
+        </td>
       </tr>
       {% endfor %}
       <tr>

@@ -1,27 +1,36 @@
 {% extends "_layout.html" %}
 {% block title %}
-Expense summary
+  Summary
 {% endblock %}
 {% block content %}
-<h1>Expense summary : {{month.title()}}</h1>
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Category</th>
-        <th scope="col">Total Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for obj in month_exp %}
+  <section class="hero is-dark">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">Monthly Expenses Summary</h1>
+        <h3 class="subtitle">for {{ month_year }}</h3>
+      </div>
+    </div>
+  </section>
+  <div class="container">
+    <table class="table">
+      <thead>
         <tr>
-            <td>{{obj.name}}</td>
-            <td>RM {{ obj.expenses | sum(attribute='amount') }}</td>
+          <th scope="col">Category</th>
+          <th scope="col">Total Amount ($)</th>
         </tr>
+      </thead>
+      <tbody>
+        {% for obj in month_exp %}
+          <tr>
+            <td>{{obj.name}}</td>
+            <td>{{ obj.expenses | sum(attribute='amount') }}</td>
+          </tr>
         {% endfor %}
         <tr>
-            <td><strong>Total {{month.title()}} expenses</strong></td>
-            <td><strong>RM {{ total | sum(attribute='amount') }}</strong></td>
+          <td><strong>Total {{month_year}} Expenses</strong></td>
+          <td><strong>{{ total | sum(attribute='amount') }}</strong></td>
         </tr>
-    </tbody>
-
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

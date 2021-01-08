@@ -97,6 +97,6 @@ def summary(month_year):
       "expenses":cat_exp
     })
   total = Expense.select().where(Expense.month==month.title(), Expense.created_at.year==year)
-  return render_template('expenses/summary.html',month_exp=month_exp,month=month,total=total)
+  return render_template('expenses/summary.html', month_exp=month_exp, month=month, total=total, month_year=month_year)
 
  

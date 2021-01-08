@@ -1,1 +1,1 @@
-web: python migrate.py; gunicorn start:app --preload --timeout 90
+web: python migrate.py; gunicorn start:app --preload
