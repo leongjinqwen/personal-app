@@ -112,19 +112,28 @@
     });
   }
   // BAR
+  let barChart;
   let barCtx = document.getElementById('catChart');
   let barSelected = 11 // default should be the latest month (last index number)
   let barValues = []
   $('#bar-month-select').on('change', function() {
     barSelected = this.value - 1
-    createBarChart()
+    updateBarChart()
   });
+  const updateBarChart = () => {
+    barValues = []
+    for (let label of labels){
+      barValues.push(mainValues[label][barSelected])
+    }
+    barChart.data.datasets[0].data = barValues
+    barChart.update()
+  }
   const createBarChart = () => {
     barValues = []
     for (let label of labels){
       barValues.push(mainValues[label][barSelected])
     }
-    let barChart = new Chart(barCtx, {
+    barChart = new Chart(barCtx, {
       type: 'bar',
       data: {
         labels:  labels,
@@ -158,19 +167,28 @@
     });
   }
   // PIE
+  let pieChart;
   let pieCtx = document.getElementById('pieChart');
   let pieSelected = 11 // default should be the latest month (last index number)
   let pieValues = []
   $('#pie-month-select').on('change', function() {
     pieSelected = this.value - 1
-    createPieChart()
+    updatePieChart()
   });
+  const updatePieChart = () => {
+    pieValues = []
+    for (let label of labels){
+      pieValues.push(mainValues[label][pieSelected])
+    }
+    pieChart.data.datasets[0].data = pieValues
+    pieChart.update()
+  }
   const createPieChart = () => {
     pieValues = []
     for (let label of labels){
       pieValues.push(mainValues[label][pieSelected])
     }
-    let pieChart = new Chart(pieCtx, {
+    pieChart = new Chart(pieCtx, {
       type: 'pie',
       data:  {
         labels: labels,
