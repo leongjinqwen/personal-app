@@ -22,9 +22,19 @@
       <canvas id="mainChart" class="chart-item box"></canvas>
     </div>
     <div class="column is-half ">
+      <select id="bar-month-select">
+        {% for month in month_labels %}
+          <option value="{{loop.index}}" {{'selected' if loop.index == 12 }}>{{month}}</option>
+        {% endfor %}
+      </select>
       <canvas id="catChart" class="chart-item box" ></canvas>
     </div>
     <div class="column is-half">
+      <select id="pie-month-select">
+        {% for month in month_labels %}
+          <option value="{{loop.index}}" {{'selected' if loop.index == 12 }}>{{month}}</option>
+        {% endfor %}
+      </select>
       <canvas id="pieChart" class="chart-item box" ></canvas>
     </div>
   </div>
@@ -32,12 +42,16 @@
 
 <script>
   const bgColors = [
-    'rgba(255, 99, 132, 0.2)',
-    'rgba(54, 162, 235, 0.2)',
-    'rgba(255, 206, 86, 0.2)',
-    'rgba(75, 192, 192, 0.2)',
-    'rgba(153, 102, 255, 0.2)',
-    'rgba(255, 159, 64, 0.2)'
+    'rgba(255, 99, 132, 0.2)', // red
+    'rgba(54, 162, 235, 0.2)', // light blue
+    'rgba(255, 206, 86, 0.2)', // yellow
+    'rgba(75, 192, 192, 0.2)', // cyan
+    'rgba(153, 102, 255, 0.2)', // purple
+    'rgba(255, 159, 64, 0.2)', // orange
+    'rgba(167, 255, 131, 0.2)', // green
+    'rgba(255, 182, 193, 0.2)', // pink
+    'rgba(0, 0, 255, 0.2)', // blue
+    'rgba(169, 169, 169, 0.2)', // grey
   ]
   const borderColors = [
     'rgba(255, 99, 132, 1)',
@@ -45,14 +59,20 @@
     'rgba(255, 206, 86, 1)',
     'rgba(75, 192, 192, 1)',
     'rgba(153, 102, 255, 1)',
-    'rgba(255, 159, 64, 1)'
+    'rgba(255, 159, 64, 1)',
+    'rgba(167, 255, 131, 1)',
+    'rgba(255, 182, 193, 1)',
+    'rgba(0, 0, 255, 1)',
+    'rgba(169, 169, 169, 1)',
   ]
   Chart.defaults.global.defaultFontColor = 'white';
 
   const labels = {{ labels | safe }}
-  const values = {{ data | safe }}
   const monthLabels = {{ month_labels | safe }}
   const mainValues = {{ main_values | safe }}
+  
+  // LINE
+  let mainCtx = document.getElementById('mainChart');
   let datum = []
   let index = 0
   for (let key in mainValues) {
@@ -64,89 +84,117 @@
     })
     index++
   }
-  
-  var mainCtx = document.getElementById('mainChart');
-  var lineChart = new Chart(mainCtx, {
-    type: 'line',
-    data: {
-      labels:  monthLabels,
-      datasets: datum,
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Overall Expenses for Last 12 Months',
-        position: 'top',
-        fontSize: 16,
+  const createLineChart = () => {
+    let lineChart = new Chart(mainCtx, {
+      type: 'line',
+      data: {
+        labels:  monthLabels,
+        datasets: datum,
       },
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            callback: function(value, index, values) {
-              return '$' + value + '.00';
+      options: {
+        title: {
+          display: true,
+          text: 'Overall Expenses for Last 12 Months',
+          position: 'top',
+          fontSize: 16,
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              callback: function(value, index, values) {
+                return '$ ' + value + '.00';
+              }
             }
-          }
-        }]
+          }]
+        }
       }
-    }
+    });
+  }
+  // BAR
+  let barCtx = document.getElementById('catChart');
+  let barSelected = 11 // default should be the latest month (last index number)
+  let barValues = []
+  $('#bar-month-select').on('change', function() {
+    barSelected = this.value - 1
+    createBarChart()
   });
-
-  var barCtx = document.getElementById('catChart');
-  var catChart = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-      labels:  labels,
-      datasets: [{
-        label: 'Total($)',
-        data:  values,
-        backgroundColor: bgColors,
-        borderColor: borderColors,
-        borderWidth: 1,
-      }]
-    },
-    options: {
-      legend: { display: false },
-      title: {
-        display: true,
-        text: 'Expenses for {{ month_year | safe }}',
-        position: 'top',
-        fontSize: 16,
+  const createBarChart = () => {
+    barValues = []
+    for (let label of labels){
+      barValues.push(mainValues[label][barSelected])
+    }
+    let barChart = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels:  labels,
+        datasets: [{
+          label: 'Total($)',
+          data:  barValues,
+          backgroundColor: bgColors,
+          borderColor: borderColors,
+          borderWidth: 1,
+        }]
       },
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            callback: function(value, index, values) {
-              return '$' + value + '.00';
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: `Expenses for ${monthLabels[barSelected]}`,
+          position: 'top',
+          fontSize: 16,
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              callback: function(value, index, values) {
+                return '$ ' + value + '.00';
+              }
             }
-          }
-        }]
+          }]
+        }
       }
-    }
+    });
+  }
+  // PIE
+  let pieCtx = document.getElementById('pieChart');
+  let pieSelected = 11 // default should be the latest month (last index number)
+  let pieValues = []
+  $('#pie-month-select').on('change', function() {
+    pieSelected = this.value - 1
+    createPieChart()
   });
-  var pieCtx = document.getElementById('pieChart');
-
-  var pieChart = new Chart(pieCtx, {
-    type: 'pie',
-    data:  {
-      labels: labels,
-      datasets: [{
-        data: values,
-        backgroundColor: bgColors,
-        borderColor: borderColors,
-        borderWidth: 1,
-      }],
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Composition of Expenses for {{ month_year | safe }}',
-        position: 'top',
-        fontSize: 16,
+  const createPieChart = () => {
+    pieValues = []
+    for (let label of labels){
+      pieValues.push(mainValues[label][pieSelected])
+    }
+    let pieChart = new Chart(pieCtx, {
+      type: 'pie',
+      data:  {
+        labels: labels,
+        datasets: [{
+          data: pieValues,
+          backgroundColor: bgColors,
+          borderColor: borderColors,
+          borderWidth: 1,
+        }],
       },
-      animation: { animateScale: true },
-    }
-  });
+      options: {
+        title: {
+          display: true,
+          text: `Composition of Expenses for ${monthLabels[pieSelected]}`,
+          position: 'top',
+          fontSize: 16,
+        },
+        animation: { animateScale: true },
+      }
+    });
+  }
+  // first render with default values
+  createLineChart()
+  createBarChart()
+  createPieChart()
 </script>
 {% endblock %}

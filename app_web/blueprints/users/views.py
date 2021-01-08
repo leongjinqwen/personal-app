@@ -52,32 +52,6 @@ def update(id):
 
 @users_blueprint.route('/dashboard', methods=["GET"])
 def dashboard():
-  categories = Category.select().where(Category.user==current_user.id)
-  data = {}
-  '''sample data
-  [
-    { "General" : 100 },
-    { "Food" : 150 },
-  ]
-  '''
-  for cat in categories:
-    current = datetime.datetime.now()
-    ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat == cat,Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year)
-    data[cat.name] = 0.0 if ttl[0].total == None else str(ttl[0].total)
-  months = {
-    1:'Jan',
-    2:'Feb',
-    3:'Mar',
-    4:'Apr',
-    5:'May',
-    6:'Jun',
-    7:'Jul',
-    8:'Aug',
-    9:'Sep',
-    10:'Oct',
-    11:'Nov',
-    12:'Dec',
-  }
 
   def _get_last_twelve(current):
     last_twelve = [] # last 12months
@@ -96,16 +70,6 @@ def dashboard():
     last_twelve.reverse()
     return last_twelve
 
-  twelve = _get_last_twelve(current)
-  '''
-  datum = [
-    "Jan, 2021": {
-      "Total": 0,
-      "General": 0,
-      "Entertainment": 0,
-    }
-  ]
-  '''
   def _get_category_monthly_total(category,twelve):
     expenses_list = []
     for pairs in twelve:
@@ -113,10 +77,32 @@ def dashboard():
       expenses_list.append(0 if ttl[0].total == None else str(ttl[0].total))
     return expenses_list
 
+  months = { 1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec' }
+  categories = Category.select().where(Category.user==current_user.id)
+  current = datetime.datetime.now()
+  twelve = _get_last_twelve(current)
+  
+  data = {}
+  '''format of data
+  data = { 
+    "General" : 100 ,
+    "Food" : 150 ,
+  }
+  '''
   result = {}
-
+  '''format of result
+  result = {
+    "Total": [],
+    "General": [],
+  }
+  '''
   month_labels = []
-  aggregate = [] # to get aggregate amount for each month
+  aggregate = [] # to collect aggregate expenses for each month
+
+  for cat in categories:
+    ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat == cat,Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year)
+    data[cat.name] = 0.0 if ttl[0].total == None else str(ttl[0].total)
+    result[cat.name] = _get_category_monthly_total(cat, twelve)
 
   for pairs in twelve:
     ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.month==months[pairs[1]],Expense.created_at.year==pairs[0])
@@ -124,14 +110,9 @@ def dashboard():
     aggregate.append(0 if ttl[0].total == None else str(ttl[0].total))
   result["Total"] = aggregate
 
-  categories = Category.select().where(Category.user==current_user.id)
-  for cat in categories:
-    result[cat.name] = _get_category_monthly_total(cat, twelve)
-
   return render_template(
     'users/dashboard.html', 
     labels = list(data.keys()), 
-    data = list(data.values()), 
     month_year = f'{datetime.date.today().strftime("%b")} {current.year}',
     month_labels = month_labels,
     main_values = result,
