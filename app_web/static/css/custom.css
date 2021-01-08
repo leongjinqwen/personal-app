@@ -1,6 +1,7 @@
 :root {
   --themebg:  #303a52;
   --white: #ffffff;
+  --NAVHEIGHT: 68px;
 }
 
 body {
@@ -35,7 +36,7 @@ footer a:hover {
 }
 
 #dashboard, #sign-in-page, #sign-up-page {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--NAVHEIGHT));
   background-color: var(--themebg);
 }
 
@@ -54,4 +55,8 @@ footer a:hover {
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+#create-expense, #edit-expense {
+  min-height: calc(100vh - var(--NAVHEIGHT));
 }

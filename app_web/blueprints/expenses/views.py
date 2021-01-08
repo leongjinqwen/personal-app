@@ -50,8 +50,9 @@ def category(category):
 
 @expenses_blueprint.route('/edit/<id>',methods=["GET"])
 def edit(id):
+  categories = Category.select().where(Category.user==current_user.id)
   expense = Expense.get_by_id(id)
-  return render_template('expenses/edit.html',expense=expense)  
+  return render_template('expenses/edit.html',expense=expense, categories=categories)  
     
 @expenses_blueprint.route('/<id>/update',methods=["POST"])
 def update(id):

@@ -23,8 +23,8 @@ def create():
   user = User(username=request.form['username'].lower(),email=request.form['email'].lower(),password=user_password)
   if user.save():
     login_user(user)
-    flash("Successfully signed up and logged in.","primary")
-    return redirect(url_for('users.show',username=user.username))
+    flash("Successfully signed up and logged in.","link")
+    return redirect(url_for('users.dashboard'))
   else:
     for error in user.errors:
       flash(error,"danger")

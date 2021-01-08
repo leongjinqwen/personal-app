@@ -69,7 +69,7 @@
       <tr>
         <td>
           <a href="{{url_for('expenses.edit',id=expense.id)}}">
-            {{expense.id}}
+            {{loop.index}}
           </a>
         </td>
         <td>{{expense.created_at.date().strftime("%b %d, %Y")}}</td>

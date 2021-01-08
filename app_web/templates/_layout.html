@@ -34,13 +34,11 @@
     <div>
       {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
-          <ul class="flashes mt-1" style="list-style: none">
           {% for category,message in messages %}
-          <div class="alert alert-{{category}}" role="alert" >
-            <li>{{ message }}</li>
-          </div>
+            <div class="notification is-{{category}}">
+              {{ message }}
+            </div>
           {% endfor %}
-          </ul>
         {% endif %}
       {% endwith %}
     </div>

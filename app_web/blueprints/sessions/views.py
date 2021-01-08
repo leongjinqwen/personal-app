@@ -25,8 +25,8 @@ def create():
         result = check_password_hash(hashed_password, password_to_check)
         if result :
             login_user(user)
-            flash("Successfully logged in.",'primary')
-            return redirect(url_for('users.show',username=user.username))
+            flash("Successfully logged in.",'link')
+            return redirect(url_for('users.dashboard'))
         else:
             flash("Please fill in valid username and password.",'danger')
             return render_template('sessions/new.html')
