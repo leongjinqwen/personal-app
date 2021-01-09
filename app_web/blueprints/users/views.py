@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, url_for, redirect, flash,
 from models.user import User
 from models.expense import Expense
 from models.category import Category
-from flask_login import login_required, login_user, current_user
+from flask_login import login_user, current_user, login_required
 import datetime
 from peewee import fn
 from decimal import *
@@ -36,17 +36,14 @@ def show(username):
   return render_template('users/show.html',username=username)
 
 
-@users_blueprint.route('/', methods=["GET"])
-def index():
-  return "USERS"
-
-
 @users_blueprint.route('/<id>/edit', methods=['GET'])
+@login_required
 def edit(id):
   pass
 
 
 @users_blueprint.route('/<id>', methods=['POST'])
+@login_required
 def update(id):
   pass
 

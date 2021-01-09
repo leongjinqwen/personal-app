@@ -2,7 +2,7 @@ from flask import Blueprint, render_template,request,url_for,redirect,flash,json
 from models.user import User
 from models.expense import Expense
 from models.category import Category
-from flask_login import current_user
+from flask_login import current_user, login_required
 from peewee import fn
 from datetime import date
 import os
@@ -13,6 +13,10 @@ expenses_blueprint = Blueprint('expenses',
                             __name__,
                             template_folder='templates')
 
+@expenses_blueprint.before_request
+@login_required
+def before_request():
+  pass
 
 @expenses_blueprint.route('/new', methods=['GET'])
 def new():

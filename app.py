@@ -1,40 +1,42 @@
 import os
 import config
-from flask import Flask
+from flask import Flask, request, redirect, url_for, flash
 from models.base_model import db
 from models.user import User
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 import click
 
 web_dir = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), 'app_web')
+  os.path.abspath(__file__)), 'app_web')
 
 app = Flask('PERSONAL-MANAGER', root_path=web_dir)
 
 if os.getenv('FLASK_ENV') == 'production':
-    app.config.from_object("config.ProductionConfig")
+  app.config.from_object("config.ProductionConfig")
 else:
-    app.config.from_object("config.DevelopmentConfig")
+  app.config.from_object("config.DevelopmentConfig")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "sessions.new"
+login_manager.login_message = "Please log in before proceeding."
+login_manager.login_message_category = "warning"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get_by_id(int(user_id))
+  return User.get_by_id(int(user_id))
 
 @app.before_request
 def before_request():
-    db.connect()
+  db.connect()
 
 
 @app.teardown_request
 def _db_close(exc):
-    if not db.is_closed():
-        print(db)
-        print(db.close())
-    return exc
+  if not db.is_closed():
+    print(db)
+    print(db.close())
+  return exc
 
 @app.cli.command("email-statement",short_help='Email statement')
 def email_statement():
@@ -47,21 +49,20 @@ def email_statement():
     today = date.today().strftime("%d")
     last_day = monthrange(int(year),int(month))[1]
     if int(today) == last_day:
-        print('run email')
-        send_email()
+      print('run email')
+      send_email()
     else:
-        print(today,"not last day")
+      print(today,"not last day")
 
 @app.cli.command("seed",short_help='Seed database')
 def seed():
-    from app_web.util.seed import change_cat
-    change_cat()
-    print("Seed finish!")
+  from app_web.util.seed import change_cat
+  change_cat()
+  print("Seed finish!")
 
 @app.cli.command("statement",short_help='generate statement')
 def statement():
-
-    from app_web.util.mail_helper import send_email
-    print('run generate and email')
-    send_email()
-    print('Done')
+  from app_web.util.mail_helper import send_email
+  print('run generate and email')
+  send_email()
+  print('Done')

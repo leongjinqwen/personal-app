@@ -43,9 +43,7 @@ def send_email():
   for user in users:
     record = Statement.get_or_none(Statement.user==user.id,Statement.month==month)
     if not record:
-      # expenses = Expense.select().where(Expense.month==date.today().strftime("%b")).order_by(Expense.created_at.asc())
       expenses = Expense.select().where(Expense.cat in user.categories, Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
-      # ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.user==user.id,Expense.month==date.today().strftime("%b"))
       ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in user.categories, Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year)
       # upload to aws
       html = render_template('expenses/statement.html',expenses=expenses,ttl=ttl,month=str(month))
@@ -55,13 +53,15 @@ def send_email():
       print(statement_url)
       statement = Statement(user=user.id,exp_url=statement_url,month=month)
       statement.save()
-      # send email with link
-      message = Mail(
-        from_email="leongjinqwen@gmail.com",
-        to_emails=user.email,
-        subject=f"{month} Expenses Statement",
-        html_content=Content("text/html", f"<h1>Dear {user.username},</h1><br/>Here is your expenses statement PDF.<br/><a href={statement_url}>{month} Statement<a><br/><h1>Jw</h1>")
-      )
+      '''
+      Send monthly statement email
+      '''
+      # message = Mail(
+      #   from_email="leongjinqwen@gmail.com",
+      #   to_emails=user.email,
+      #   subject=f"{month} Expenses Statement",
+      #   html_content=Content("text/html", f"<h1>Dear {user.username},</h1><br/>Here is your expenses statement PDF.<br/><a href={statement_url}>{month} Statement<a><br/><h1>Jw</h1>")
+      # )
       try:
         response = sg.send(message)
         print(response.body)
