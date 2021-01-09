@@ -23,8 +23,9 @@ def create():
   user = User(username=request.form['username'].lower(),email=request.form['email'].lower(),password=user_password)
   if user.save():
     login_user(user)
-    flash("Successfully signed up and logged in.","link")
-    return redirect(url_for('users.dashboard'))
+    Category.create(name="General Expenses", user=user.id)
+    flash("Welcome! Start tracking your money by recording your expenses according to Category.","link")
+    return redirect(url_for('users.show', username=user.username))
   else:
     for error in user.errors:
       flash(error,"danger")
