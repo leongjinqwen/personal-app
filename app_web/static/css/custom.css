@@ -1,7 +1,9 @@
 :root {
   --themebg:  #303a52;
+  --cardbg: #0e153a;
   --white: #ffffff;
   --NAVHEIGHT: 68px;
+  --FOOTERHEIGHT: 60px;
 }
 
 body {
@@ -41,7 +43,7 @@ footer a:hover {
 }
 
 .chart-item {
-  background-color: #0e153a !important ;
+  background-color: var(--cardbg) !important ;
 }
 
 #topnav {
@@ -59,4 +61,13 @@ footer a:hover {
 
 #create-expense, #edit-expense {
   min-height: calc(100vh - var(--NAVHEIGHT));
+}
+.nav {
+  display: block;
+}
+.nav-tabs {
+  border: none;
+}
+.nav-tabs a {
+  text-decoration-line: none;
 }

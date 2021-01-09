@@ -40,19 +40,19 @@ def _db_close(exc):
 
 @app.cli.command("email-statement",short_help='Email statement')
 def email_statement():
-    from app_web.util.mail_helper import send_email
-    from datetime import date
-    from calendar import monthrange
+  from app_web.util.mail_helper import send_email
+  from datetime import date
+  from calendar import monthrange
 
-    year = date.today().strftime("%Y")
-    month = date.today().strftime("%m")
-    today = date.today().strftime("%d")
-    last_day = monthrange(int(year),int(month))[1]
-    if int(today) == last_day:
-      print('run email')
-      send_email()
-    else:
-      print(today,"not last day")
+  year = date.today().strftime("%Y")
+  month = date.today().strftime("%m")
+  today = date.today().strftime("%d")
+  last_day = monthrange(int(year),int(month))[1]
+  if int(today) == last_day:
+    print('run email')
+    send_email()
+  else:
+    print(today,"not last day")
 
 @app.cli.command("seed",short_help='Seed database')
 def seed():
@@ -66,3 +66,8 @@ def statement():
   print('run generate and email')
   send_email()
   print('Done')
+
+import logging
+logger = logging.getLogger('peewee')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)

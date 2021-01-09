@@ -13,6 +13,3 @@ class Expense(BaseModel):
     source = pw.CharField(null=False)
     month = pw.CharField(default=date.today().strftime("%b"))
 
-    # @hybrid_property
-    # def created_month(self):
-    #     return self.created_at.date().strftime("%b")

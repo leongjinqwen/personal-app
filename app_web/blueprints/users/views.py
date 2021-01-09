@@ -33,14 +33,17 @@ def create():
 @users_blueprint.route('/<username>', methods=["GET"])
 @login_required
 def show(username):
-  return render_template('users/show.html',username=username)
-
-
-@users_blueprint.route('/<id>/edit', methods=['GET'])
-@login_required
-def edit(id):
-  pass
-
+  user = User.get_or_none(User.username == username)
+  if not user:
+    flash("User not found.", "danger")
+    return redirect(url_for('user.show', username = current_user.username))
+  else:
+    if current_user.id == user.id:
+      return render_template('users/show.html',username=user.username)
+    else:
+      flash("Unauthorized to visit this user's profile.", "danger")
+      return redirect(url_for('user.show', username = current_user.username))
+    
 
 @users_blueprint.route('/<id>', methods=['POST'])
 @login_required

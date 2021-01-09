@@ -5,6 +5,7 @@ from app_web.blueprints.sessions.views import sessions_blueprint
 from app_web.blueprints.expenses.views import expenses_blueprint
 from app_web.blueprints.reminders.views import reminders_blueprint
 from app_web.blueprints.statements.views import statements_blueprint
+from app_web.blueprints.categories.views import categories_blueprint
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
 from .util.jinja_filter import register_jinja_filters
@@ -22,14 +23,15 @@ app.register_blueprint(sessions_blueprint, url_prefix="/sessions")
 app.register_blueprint(expenses_blueprint, url_prefix="/expenses")
 app.register_blueprint(reminders_blueprint, url_prefix="/reminders")
 app.register_blueprint(statements_blueprint, url_prefix="/statements")
+app.register_blueprint(categories_blueprint, url_prefix="/categories")
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html'), 500
+  return render_template('500.html'), 500
 
 
 @app.route("/")
 def home():
-    if current_user.is_authenticated:
-        return redirect(url_for('users.dashboard'))
-    return render_template('home.html')
+  if current_user.is_authenticated:
+    return redirect(url_for('users.dashboard'))
+  return render_template('home.html')

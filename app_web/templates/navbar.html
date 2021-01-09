@@ -64,6 +64,12 @@
           <span class="text-dark">Profile</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="profileDropdown">
+          <a class="nav-link d-flex icon-text align-items-center dropdown-item" href="{{url_for('users.show', username=current_user.username)}}">
+            <span class="icon has-text-dark">
+              <i class="fas fa-cog"></i>
+            </span>
+            <span class="text-dark">Setting</span>
+          </a>
           <a class="nav-link d-flex icon-text align-items-center dropdown-item" href="{{url_for('statements.index')}}">
             <span class="icon has-text-dark">
               <i class="fas fa-file-download"></i>

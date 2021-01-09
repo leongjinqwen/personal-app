@@ -2,8 +2,219 @@
 {% block title %}
   Setting
 {% endblock %}
+{% block header %}
+  <style>
+    #setting-card {
+      min-height: calc(100vh - var(--NAVHEIGHT) - var(--FOOTERHEIGHT) );
+    }
+  </style>
+{% endblock %}
 {% block content %}
+<div class="columns container is-fullhd my-3">
+  <aside class="menu column is-12-mobile is-4-desktop ">
+    <!-- profile -->
+    <div class="media mb-3">
+      <div class="media-left">
+        <figure class="image is-48x48">
+          <img src="https://ui-avatars.com/api/?name={{current_user.username}}&background=0e153a&color=fff" alt="Placeholder image">
+        </figure>
+      </div>
+      <div class="media-content">
+        <p class="title is-4">{{ current_user.username }}</p>
+        <p class="subtitle is-6">{{ current_user.email }}</p>
+      </div>
+    </div>
+    <!-- menu to toggle -->
+    <ul class="menu-list nav nav-tabs" role="tablist">
+      <li><a class="active" href="#account" role="tab" data-toggle="tab">My Account</a></li>
+      <li><a class="" href="#category" role="tab" data-toggle="tab">My Categories</a></li>
+    </ul>
+  </aside>
 
-<h1>{{username}}</h1>
+  <!-- toggled content -->
+  <div id="setting-card" class="column pr-5 is-12-mobile is-8-desktop ">
+    <div class="tab-content card h-100">
+      <div role="tabpanel" class="tab-pane active" id="account" >
+        <section class="hero is-dark">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="subtitle m-0"><strong>Profile</strong></h1>
+              <p>Manage and protect your account</p>
+            </div>
+          </div>
+        </section>
 
+        <form class="container p-5" action="{{url_for('users.update', id=current_user.id )}}" method="POST">      
+          <div class="field">
+            <label class="label">Username</label>
+            <div class="control has-icons-left">
+              <input type='text' required value={{current_user.username}} name='username' placeholder="Username" class="input" />
+              <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control has-icons-left">
+              <input type='email' required value={{current_user.email}} name='email' placeholder="Email" class="input" />
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control has-icons-left">
+              <input type='password' required name='password' placeholder="Password" class="input" />
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </div>
+          </div>
+          <button type="submit" class="button is-success is-fullwidth">Save</button>
+        </form>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="category" >
+        <section class="hero is-dark">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="subtitle m-0 d-flex justify-content-between">
+                <strong>My Expenses Categories</strong>
+                <button id="toggle-button" class="button is-link is-small">
+                  <span class="icon is-small">
+                    <i class="fas fa-plus"></i>
+                  </span> 
+                  <span>Add New Category</span>
+                </button>
+              </h1>
+              <small>Max 10 categories</small>
+            </div>
+          </div>
+        </section>
+        <!-- card list-item to list all categories -->
+        {% for cat in current_user.categories %}
+        <div class="px-5 panel-block d-flex justify-content-between">
+          <span>
+            {{loop.index}}.  {{cat.name}}
+          </span>
+          <div class="is-right">
+            <button onclick="editCategory( '{{ cat.id | safe}}','{{ cat.name | safe }}' )" class="button is-small is-info">
+              <span class="icon">
+                <i class="fas fa-edit"></i>
+              </span>
+            </button>
+            <button onclick="deleteCategory( '{{ cat.id | safe}}','{{ cat.name | safe }}' )" class="button is-small is-danger">
+              <span class="icon">
+                <i class="fas fa-trash-alt"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- confirm delete modal -->
+<div id="delete-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <section class="modal-card-body text-center py-5" style="height: 250px;">
+      <p class="subtitle py-5">
+        Confirm delete "<strong id="selected"></strong>" category?
+      </p>
+      <div class="my-5 d-flex justify-content-center">
+        <form id="delete-form" method="POST">
+          <input class="button mx-2 is-small is-primary" type="submit" value="Confirm" />
+        </form>
+        <button id="close-delete" class="button mx-2 is-small is-danger">Cancel</button>
+      </div>
+    </section>
+  </div>
+</div>
+<!-- modal form to add new category -->
+<div id="category-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Add New Category</p>
+      <button id="close-button" class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <form class="container p-5" action="{{url_for('categories.create')}}" method="POST">      
+        <div class="field">
+          <label class="label">Category Name</label>
+          <div class="control has-icons-left">
+            <input type='text' required name='name' placeholder="Name" class="input" />
+            <span class="icon is-small is-left">
+              <i class="fas fa-poll-h"></i>
+            </span>
+          </div>
+        </div>
+        <button type="submit" class="button is-link is-fullwidth">Save</button>
+      </form>
+    </section>
+    <footer class="m-0 modal-card-foot"></footer>
+  </div>
+</div>
+<!-- modal form to edit category -->
+<div id="edit-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Edit Category</p>
+      <button id="close-edit" class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <form id="edit-form" class="container p-5" method="POST">      
+        <div class="field">
+          <label class="label">Category Name</label>
+          <div class="control has-icons-left">
+            <input id="edit-input" type='text' required name='name' placeholder="Name" class="input" />
+            <span class="icon is-small is-left">
+              <i class="fas fa-poll-h"></i>
+            </span>
+          </div>
+        </div>
+        <button type="submit" class="button is-warning is-fullwidth">Save</button>
+      </form>
+    </section>
+    <footer class="m-0 modal-card-foot"></footer>
+  </div>
+</div>
+
+<script>
+  const toggleModal = () => {
+    if ($("#category-modal").hasClass('is-active')) {
+      $("#category-modal").removeClass('is-active')
+    } else {
+      $("#category-modal").addClass('is-active')
+    }
+  }
+  $("#toggle-button").click(function(){
+    toggleModal()
+  })
+  $("#close-button").click(function(){
+    toggleModal()
+  })
+  
+  const apiUrl = "{{ 'FLASK_ENV' | getenv }}" == 'production' ? 'https://personal-mgt-app.herokuapp.com' :'http://localhost:5000'
+  const deleteCategory = (catId, name) => {
+    $("#selected").html(name)
+    $("#delete-form").attr('action', `${apiUrl}/categories/${catId}/delete`)
+    $("#delete-modal").addClass('is-active')
+  }
+  const editCategory = (catId, name) => {
+    $("#edit-input").val(name)
+    $("#edit-form").attr('action', `${apiUrl}/categories/${catId}`)
+    $("#edit-modal").addClass('is-active')
+  }
+  $("#close-delete").click(function(){
+    $("#delete-modal").removeClass('is-active')
+  })
+  $("#close-edit").click(function(){
+    $("#edit-modal").removeClass('is-active')
+  })
+</script>
 {% endblock %}
