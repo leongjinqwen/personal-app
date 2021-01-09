@@ -49,7 +49,17 @@ def show(username):
 @users_blueprint.route('/<id>', methods=['POST'])
 @login_required
 def update(id):
-  pass
+  user = User.get_or_none(id=id)
+  user.password = request.form['password']
+  user.email = request.form['email']
+  user.username = request.form['username']
+  if user.save():
+    flash("Profile updated.","link")
+    return redirect(url_for('users.show', username=user.username))
+  else:
+    for error in user.errors:
+      flash(error,"danger")
+    return redirect(url_for('users.show', username=user.username))
 
 @users_blueprint.route('/dashboard', methods=["GET"])
 @login_required
