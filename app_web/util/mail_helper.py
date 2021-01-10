@@ -45,11 +45,10 @@ def send_email():
     if not record:
       expenses = Expense.select().where(Expense.cat in user.categories, Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
       ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in user.categories, Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year)
-      # upload to aws
       html = render_template('expenses/statement.html',expenses=expenses,ttl=ttl,month=str(month))
       pdf_name = (user.username).replace(" ", "-").lower() + "-" + str(month).replace(" ", "-")
       temp_file = create_pdf(html, pdf_name)
-      statement_url = upload_image_to_s3(temp_file)
+      statement_url = upload_image_to_s3(user.id ,temp_file)
       print(statement_url)
       statement = Statement(user=user.id,exp_url=statement_url,month=month)
       statement.save()
