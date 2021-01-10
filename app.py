@@ -40,7 +40,7 @@ def _db_close(exc):
 
 @app.cli.command("email-statement",short_help='Email statement')
 def email_statement():
-  from app_web.util.mail_helper import send_email
+  from app_web.util.mail_helper import create_statement
   from datetime import date
   from calendar import monthrange
 
@@ -50,7 +50,7 @@ def email_statement():
   last_day = monthrange(int(year),int(month))[1]
   if int(today) == last_day:
     print('run email')
-    send_email()
+    create_statement()
   else:
     print(today,"not last day")
 
@@ -61,11 +61,14 @@ def seed():
   print("Seed finish!")
 
 @app.cli.command("statement",short_help='generate statement')
-def statement():
-  from app_web.util.mail_helper import send_email
-  print('run generate and email')
-  send_email()
-  print('Done')
+@click.argument('month') # flask statement December-2020
+def statement(month):
+  from app_web.util.mail_helper import create_statement
+
+  month_year = month.split('-') # convert December-2020 to December 2020
+  statement_month = f"{month_year[0]} {month_year[1]}"
+  create_statement(statement_month)
+  print(f'generate {statement_month}')
 
 # import logging
 # logger = logging.getLogger('peewee')

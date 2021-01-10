@@ -27,4 +27,3 @@ def upload_image_to_s3(folder_name, file, acl="public-read"):
     return e
 
   return f"user-{folder_name}/{file.filename}"
-  # return f"http://{os.getenv('S3_BUCKET_NAME')}.s3.amazonaws.com/{file.filename}"

@@ -13,7 +13,7 @@ import datetime
 from peewee import fn
 from flask import render_template
 
-def send_email():
+def create_statement(month=None):
   def _get_pdfkit_config():
     if os.getenv('FLASK_ENV') == 'production':
       WKHTMLTOPDF_CMD = subprocess.Popen(
@@ -35,7 +35,9 @@ def send_email():
     return temp_file
 
   current = datetime.datetime.now()
-  month = datetime.date.today().strftime("%B %Y")
+  
+  if month == None :
+    month = datetime.date.today().strftime("%B %Y") # current month
 
   # select all user from database
   users = User.select()
@@ -61,11 +63,11 @@ def send_email():
       #   subject=f"{month} Expenses Statement",
       #   html_content=Content("text/html", f"<h1>Dear {user.username},</h1><br/>Here is your expenses statement PDF.<br/><a href={statement_url}>{month} Statement<a><br/><h1>Jw</h1>")
       # )
-      try:
-        response = sg.send(message)
-        print(response.body)
-      except Exception as e:
-        print(str(e))
+      # try:
+      #   response = sg.send(message)
+      #   print(response.body)
+      # except Exception as e:
+      #   print(str(e))
     else:
       print('already exist!')
 
