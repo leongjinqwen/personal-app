@@ -44,12 +44,13 @@ def category(category):
     if category == 'all':
       categories = Category.select().where(Category.user==current_user.id)
       expenses = Expense.select().where(Expense.cat in categories,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
-      ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in categories,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year)
     else:
       selected = Category.get(Category.name==category.title())
       expenses = Expense.select().where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
-      ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year)
-    return render_template('expenses/show.html',expenses=expenses,ttl=ttl,cat=category.title())
+    total = 0
+    for exp in expenses:
+      total += exp.amount
+    return render_template('expenses/show.html',expenses=expenses,total=total,cat=category.title())
   return render_template('sessions/new.html')  
 
 @expenses_blueprint.route('/edit/<id>',methods=["GET"])

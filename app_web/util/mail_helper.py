@@ -26,10 +26,10 @@ def create_statement(month=None):
 
   def create_pdf(pdf_content, filename):
     options = {
-      'margin-top': '0mm',
-      'margin-bottom': '0mm',
-      'margin-left': '0mm',
-      'margin-right': '0mm',
+      'margin-top': '10mm',
+      'margin-bottom': '10mm',
+      'margin-left': '10mm',
+      'margin-right': '10mm',
       'page-size': 'A4',
       'page-width': '210mm',
       'page-height': '296mm'
