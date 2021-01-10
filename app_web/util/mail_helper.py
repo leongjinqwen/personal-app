@@ -61,9 +61,12 @@ def create_statement(month=None):
     record = Statement.get_or_none(Statement.user==user.id, Statement.month==full_month)
     if not record:
       expenses = Expense.select().where(Expense.cat in user.categories, Expense.month == short_month, Expense.created_at.year == year).order_by(Expense.created_at.asc())
-      ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in user.categories, Expense.month == short_month, Expense.created_at.year == year)
-      
-      html = render_template('expenses/statement.html', expenses=expenses, ttl=ttl, month=str(full_month))
+      # ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in user.categories, Expense.month == short_month, Expense.created_at.year == year)
+      total = 0
+      for exp in expenses:
+        total += exp.amount
+
+      html = render_template('expenses/statement.html', expenses=expenses, total=total, month=str(full_month))
       pdf_name = (user.username).replace(" ", "-").lower() + "-" + str(full_month).replace(" ", "-")
       temp_file = create_pdf(html, pdf_name)
       statement_url = upload_image_to_s3(user.id ,temp_file)

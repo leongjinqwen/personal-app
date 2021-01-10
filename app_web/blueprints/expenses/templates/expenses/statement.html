@@ -70,10 +70,10 @@
               <td>
                 <strong>
                   $ 
-                  {% if ttl[0].total == None %}
+                  {% if total == 0 %}
                     0.00
                   {% else %}
-                    {{ttl[0].total}}
+                    {{total}}
                   {% endif %}
                 </strong>
               </td>
