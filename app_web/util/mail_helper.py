@@ -25,8 +25,17 @@ def create_statement(month=None):
       return pdfkit.configuration()
 
   def create_pdf(pdf_content, filename):
+    options = {
+      'margin-top': '0mm',
+      'margin-bottom': '0mm',
+      'margin-left': '0mm',
+      'margin-right': '0mm',
+      'page-size': 'A4',
+      'page-width': '210mm',
+      'page-height': '296mm'
+    }
     pdf = pdfkit.from_string(
-      pdf_content, False, configuration=_get_pdfkit_config())
+      pdf_content, False, configuration=_get_pdfkit_config(), options=options)
     temp_file = tempfile.TemporaryFile()
     temp_file.filename = filename
     temp_file.content_type = "application/pdf"
@@ -34,25 +43,33 @@ def create_statement(month=None):
     temp_file.seek(0)
     return temp_file
 
-  current = datetime.datetime.now()
-  
   if month == None :
-    month = datetime.date.today().strftime("%B %Y") # current month
+    year = datetime.datetime.now().year
+    full_month = datetime.date.today().strftime("%B %Y") # current month
+    short_month = datetime.date.today().strftime("%b")
+  else:
+    # '2020-12' convert to 'December 2020'
+    year_month = month.split('-') # ['2020','12']
+    year = int(year_month[0])
+    short_month = datetime.datetime(year, int(year_month[1]), 1).strftime("%b")
+    full_month = datetime.datetime(year, int(year_month[1]), 1).strftime("%B %Y")
 
   # select all user from database
   users = User.select()
   # get all expenses to render in template
   for user in users:
-    record = Statement.get_or_none(Statement.user==user.id,Statement.month==month)
+    record = Statement.get_or_none(Statement.user==user.id, Statement.month==full_month)
     if not record:
-      expenses = Expense.select().where(Expense.cat in user.categories, Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
-      ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in user.categories, Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year)
-      html = render_template('expenses/statement.html',expenses=expenses,ttl=ttl,month=str(month))
-      pdf_name = (user.username).replace(" ", "-").lower() + "-" + str(month).replace(" ", "-")
+      expenses = Expense.select().where(Expense.cat in user.categories, Expense.month == short_month, Expense.created_at.year == year).order_by(Expense.created_at.asc())
+      ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat in user.categories, Expense.month == short_month, Expense.created_at.year == year)
+      
+      html = render_template('expenses/statement.html', expenses=expenses, ttl=ttl, month=str(full_month))
+      pdf_name = (user.username).replace(" ", "-").lower() + "-" + str(full_month).replace(" ", "-")
       temp_file = create_pdf(html, pdf_name)
       statement_url = upload_image_to_s3(user.id ,temp_file)
       print(statement_url)
-      statement = Statement(user=user.id,exp_url=statement_url,month=month)
+
+      statement = Statement(user=user.id, exp_url=statement_url, month=full_month)
       statement.save()
       '''
       Send monthly statement email

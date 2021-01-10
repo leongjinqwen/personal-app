@@ -61,14 +61,12 @@ def seed():
   print("Seed finish!")
 
 @app.cli.command("statement",short_help='generate statement')
-@click.argument('month') # flask statement December-2020
+@click.argument('month') # flask statement 2020-12
 def statement(month):
   from app_web.util.mail_helper import create_statement
 
-  month_year = month.split('-') # convert December-2020 to December 2020
-  statement_month = f"{month_year[0]} {month_year[1]}"
-  create_statement(statement_month)
-  print(f'generate {statement_month}')
+  create_statement(month)
+  print(f'generate statement for {month}')
 
 # import logging
 # logger = logging.getLogger('peewee')
