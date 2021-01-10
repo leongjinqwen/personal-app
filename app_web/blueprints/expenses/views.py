@@ -40,17 +40,22 @@ def create(user_id):
 @expenses_blueprint.route('/<category>')
 def category(category):
   current = datetime.datetime.now()
+  categories = Category.select().where(Category.user==current_user.id).order_by(Category.created_at.desc())
   if current_user.is_authenticated:
     if category == 'all':
-      categories = Category.select().where(Category.user==current_user.id)
-      expenses = Expense.select().where(Expense.cat in categories,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
+      expenses = Expense.select().join(Category).where(
+        Category.user == current_user.id,
+        Expense.month == date.today().strftime("%b"),
+        Expense.created_at.year == current.year
+        ).order_by(Expense.created_at.asc()
+      )
     else:
-      selected = Category.get(Category.name==category.title())
+      selected = Category.get(Category.name==category)
       expenses = Expense.select().where(Expense.cat==selected.id,Expense.month==date.today().strftime("%b"),Expense.created_at.year==current.year).order_by(Expense.created_at.asc())
     total = 0
     for exp in expenses:
       total += exp.amount
-    return render_template('expenses/show.html',expenses=expenses,total=total,cat=category.title())
+    return render_template('expenses/show.html', expenses=expenses, total=total, cat=category, categories=categories)
   return render_template('sessions/new.html')  
 
 @expenses_blueprint.route('/edit/<id>',methods=["GET"])

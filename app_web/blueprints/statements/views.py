@@ -11,7 +11,7 @@ statements_blueprint = Blueprint('statements',
 @statements_blueprint.route('/', methods=['GET'])
 @login_required
 def index():
-  statements = Statement.select().where(Statement.user==current_user.id)
+  statements = Statement.select().where(Statement.user==current_user.id).order_by(Statement.created_at.desc())
   return render_template("statements/new.html",statements=statements)
 
 

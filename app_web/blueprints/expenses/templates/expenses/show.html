@@ -31,21 +31,14 @@
     <nav class="tabs is-boxed m-0">
       <div class="container">
         <ul>
-          <li class="{{ 'is-active' if cat=='All' }}" >
-            <a class="tab-item" href="{{url_for('expenses.category',category='all')}}">All</a>
+          <li class="{{ 'is-active' if cat=='all' }}" >
+            <a class="tab-item" href="{{url_for('expenses.category',category='all' )}}">All</a>
           </li>
-          <li class="{{ 'is-active' if cat=='Food' }}" >
-            <a class="tab-item" href="{{url_for('expenses.category',category='food')}}">Food</a>
+          {% for category in categories %}
+          <li class="{{ 'is-active' if cat==category.name }}" >
+            <a class="tab-item" href="{{url_for('expenses.category',category=category.name )}}">{{category.name}}</a>
           </li>
-          <li class="{{ 'is-active' if cat=='Transport' }}" >
-            <a class="tab-item" href="{{url_for('expenses.category',category='transport')}}">Transport</a>
-          </li>
-          <li class="{{ 'is-active' if cat=='Entertainment' }}" >
-            <a class="tab-item" href="{{url_for('expenses.category',category='entertainment')}}">Entertainment</a>
-          </li>
-          <li class="{{ 'is-active' if cat=='General' }}" >
-            <a class="tab-item" href="{{url_for('expenses.category',category='general')}}">General</a>
-          </li>
+          {% endfor %}
         </ul>
       </div>
     </nav>
@@ -105,18 +98,20 @@
         </tr>
     </tbody>
   </table>
-  <a id="hideButton" class="btn btn-primary" href="{{url_for('expenses.new')}}" >
-    <span class="icon is-small">
-      <i class="fas fa-plus"></i>
-    </span> 
-    <span>Expenses</span>
-  </a>
-  <button class="btn btn-success" onclick="window.print()" >
-    <span class="icon is-small">
-      <i class="fas fa-print"></i>
-    </span> 
-    Statement
-  </button>
+  <div class="my-5">
+    <a id="hideButton" class="btn btn-primary" href="{{url_for('expenses.new')}}" >
+      <span class="icon is-small">
+        <i class="fas fa-plus"></i>
+      </span> 
+      <span>Expenses</span>
+    </a>
+    <button class="btn btn-success" onclick="window.print()" >
+      <span class="icon is-small">
+        <i class="fas fa-print"></i>
+      </span> 
+      Statement
+    </button>
+  </div>
 </div>
 
 {% endblock %}
