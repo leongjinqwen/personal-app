@@ -10,9 +10,10 @@ Flask==1.0.2
 Flask-Assets==0.12
 Flask-Cors==3.0.7
 Flask-Login==0.4.1
+Flask-WTF==0.14.3
 gunicorn==20.0.4
 itsdangerous==1.1.0
-Jinja2>=2.10.1
+Jinja2==2.11.2
 jmespath==0.9.4
 jsmin==2.2.2
 MarkupSafe==1.1.0
@@ -29,5 +30,6 @@ sendgrid==6.1.0
 six==1.12.0
 urllib3==1.25.7
 webassets==0.12.1
-werkzeug>=0.15.3
+Werkzeug==1.0.1
 wkhtmltopdf-pack-ng==0.12.3.0
+WTForms==2.3.3

@@ -3,6 +3,7 @@ import config
 from flask import Flask, request, redirect, url_for, flash
 from models.base_model import db
 from models.user import User
+from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, current_user
 import click
 
@@ -10,6 +11,7 @@ web_dir = os.path.join(os.path.dirname(
   os.path.abspath(__file__)), 'app_web')
 
 app = Flask('PERSONAL-MANAGER', root_path=web_dir)
+csrf= CSRFProtect(app)
 
 if os.getenv('FLASK_ENV') == 'production':
   app.config.from_object("config.ProductionConfig")

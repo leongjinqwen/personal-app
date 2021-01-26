@@ -44,7 +44,8 @@
           </div>
         </section>
 
-        <form class="container p-5" action="{{url_for('users.update', id=current_user.id )}}" method="POST">      
+        <form class="container p-5" action="{{url_for('users.update', id=current_user.id )}}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
           <div class="field">
             <label class="label">Username</label>
             <div class="control has-icons-left">
@@ -126,6 +127,7 @@
       </p>
       <div class="my-5 d-flex justify-content-center">
         <form id="delete-form" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
           <input class="button mx-2 is-small is-primary" type="submit" value="Confirm" />
         </form>
         <button id="close-delete" class="button mx-2 is-small is-danger">Cancel</button>
@@ -142,7 +144,8 @@
       <button id="close-button" class="delete" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-      <form class="container p-5" action="{{url_for('categories.create')}}" method="POST">      
+      <form class="container p-5" action="{{url_for('categories.create')}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="field">
           <label class="label">Category Name</label>
           <div class="control has-icons-left">
@@ -167,7 +170,8 @@
       <button id="close-edit" class="delete" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
-      <form id="edit-form" class="container p-5" method="POST">      
+      <form id="edit-form" class="container p-5" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="field">
           <label class="label">Category Name</label>
           <div class="control has-icons-left">

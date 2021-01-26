@@ -12,7 +12,8 @@
     </div>
   </section>
   <div class="form-item card">
-    <form action="{{url_for('expenses.create',user_id=current_user.id)}}" method="POST">      
+    <form action="{{url_for('expenses.create',user_id=current_user.id)}}" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       <div class="field">
         <label class="label" for="category">Category</label>
         <select name='category' class="custom-select">

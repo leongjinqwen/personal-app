@@ -6,7 +6,8 @@
   <div id="sign-in-page">
     <div class="form-item card">
       <h1 class="subtitle">Sign In</h1>
-      <form action="{{url_for('sessions.create')}}" method="POST">      
+      <form action="{{url_for('sessions.create')}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="field">
           <div class="control has-icons-left">
             <input type='email' required name='email' placeholder="Email" class="input" />

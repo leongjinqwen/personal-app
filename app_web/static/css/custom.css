@@ -35,6 +35,7 @@ footer a {
 }
 footer a:hover {
   text-decoration: none;
+  color: white;
 }
 
 #dashboard, #sign-in-page, #sign-up-page {
