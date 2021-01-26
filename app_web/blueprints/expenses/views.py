@@ -31,14 +31,14 @@ def create(user_id):
   expense = Expense(cat=category,category=category.name,amount=request.form.get('amount'),source=request.form.get('source'),description=request.form.get('desc'))
   if expense.save():
     flash("Successfully create expense record.","primary")
-    return redirect(url_for('expenses.category',category="all"))
+    return redirect(url_for('expenses.show',category="all"))
   else:
     flash("Something happened, try again later.","danger")
     categories = Category.select().where(Category.user==current_user.id)
     return render_template('expenses/new.html',categories=categories)
 
 @expenses_blueprint.route('/<category>')
-def category(category):
+def show(category):
   current = datetime.datetime.now()
   categories = Category.select().where(Category.user==current_user.id).order_by(Category.created_at.desc())
   if current_user.is_authenticated:
@@ -81,6 +81,18 @@ def update(id):
       flash("Something happened, try again later.","danger")
       return render_template('expenses/edit.html',expense=expense) 
   return render_template('sessions/new.html')  
+
+@expenses_blueprint.route('/delete/<id>',methods=["GET"])
+def delete(id):
+  expense = Expense.get_or_none(id=id)
+  if not expense:
+    flash("No expense record found.", "danger")
+  else :
+    expense.delete_instance()
+    flash("Expense record successfully deleted.", "primary")
+
+  return redirect(url_for('expenses.show',category="all"))
+
 
 @expenses_blueprint.route('/summary',methods=["GET"])
 def summary_list():
