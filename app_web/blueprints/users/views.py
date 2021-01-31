@@ -93,7 +93,7 @@ def dashboard():
   categories = Category.select().where(Category.user==current_user.id)
   current = datetime.datetime.now()
   twelve = _get_last_twelve(current)
-  
+
   data = {}
   '''format of data
   data = { 
@@ -110,21 +110,23 @@ def dashboard():
   '''
   month_labels = []
   aggregate = [] # to collect aggregate expenses for each month
+  category_labels = []
+  category_ids = []
 
   for cat in categories:
-    ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat == cat,Expense.month==datetime.date.today().strftime("%b"),Expense.created_at.year==current.year)
-    data[cat.name] = 0.0 if ttl[0].total == None else str(ttl[0].total)
+    category_labels.append(cat.name)
+    category_ids.append(cat.id)
     result[cat.name] = _get_category_monthly_total(cat, twelve)
 
   for pairs in twelve:
-    ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.month==months[pairs[1]],Expense.created_at.year==pairs[0])
+    ttl = Expense.select(fn.SUM(Expense.amount).alias('total')).where(Expense.cat.in_(category_ids), Expense.month==months[pairs[1]],Expense.created_at.year==pairs[0])
     month_labels.append(f"{months[pairs[1]]}, {pairs[0]}")
     aggregate.append(0 if ttl[0].total == None else str(ttl[0].total))
   result["Total"] = aggregate
-
+  print(result['Total'][11])
   return render_template(
     'users/dashboard.html', 
-    labels = list(data.keys()), 
+    labels = category_labels, 
     month_year = f'{datetime.date.today().strftime("%b")} {current.year}',
     month_labels = month_labels,
     main_values = result,
